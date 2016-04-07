@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Context antiJARLocking="true" path="/todo-lista">
-    <Resource name="jdbc/tietokanta" auth="Container"
+    <Resource name="jdbc/niil" auth="Container"
         type="javax.sql.DataSource" removeAbandoned="true"
         removeAbandonedTimeout="30" maxActive="100"
         maxIdle="30" maxWait="10000" username="niil"

@@ -8,6 +8,11 @@ and open the template in the editor.
     Author     : ile
 */
 
-body {
-    margin-top: 60px;
+body { padding-top: 40px; }
+@media screen and (max-width: 768px) {
+    body { padding-top: 170px; }
+}
+.col-centered{
+    float: none;
+    margin: 0 auto;
 }

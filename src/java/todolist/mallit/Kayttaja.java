@@ -30,7 +30,7 @@ public class Kayttaja {
         this.salasana = salasana;
     }
 
-    private Kayttaja() {
+    public Kayttaja() {
 
     }
 
@@ -60,7 +60,7 @@ public class Kayttaja {
 
     public static ArrayList<Kayttaja> getKayttajat() throws NamingException, SQLException {
         Connection yhteys = Tietokanta.getYhteys();
-        String sql = "SELECT id, tunnus, salasana from kayttajat";
+        String sql = "SELECT id, nimi, salasana from Kayttaja";
         PreparedStatement kysely = yhteys.prepareStatement(sql);
         ResultSet rs = kysely.executeQuery();
         ArrayList<Kayttaja> kayttajat = new ArrayList<Kayttaja>();
@@ -76,5 +76,22 @@ public class Kayttaja {
         }
 
         return kayttajat;
+    }
+    public static Kayttaja getKayttaja(String nimi) throws NamingException, SQLException{
+        Connection yhteys = Tietokanta.getYhteys();
+        String sql = "SELECT id, nimi, salasana from Kayttaja WHERE nimi='"+nimi+"';";
+        PreparedStatement kysely = yhteys.prepareStatement(sql);
+        ResultSet rs = kysely.executeQuery();
+        
+        if (rs.next()){
+            //Haetaan tietoa riviltä
+            Kayttaja k = new Kayttaja();
+            k.setId(rs.getInt("id"));
+            k.setNimi(rs.getString("nimi"));
+            k.setSalasana(rs.getString("salasana"));
+            return k;
+        } else {
+            return null;
+        }  
     }
 }
