@@ -11,8 +11,8 @@ Yleisiä linkkejä
 
 [HTML-demo](http://t-niil.users.cs.helsinki.fi/todo-lista/html-demo/index.html)
 
-[Listaustesti](http://t-niil.users.cs.helsinki.fi/todo-lista/kayttajat)
-Huom viikko3: Tuntienkaan pään hakkaamisella listaus ei suostunut toimimaan, vaan näkymä saa jostain syystä arraylistin string-muotoisena ja aika loppui kesken, eikä formin tekemiseen jäänyt aikaa
+[Listausdemo](http://t-niil.users.cs.helsinki.fi/todo-lista/kayttajat)
+
 
 Työn aihe
 
