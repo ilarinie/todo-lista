@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package todolist.paaohjelma;
+package todolist.servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.naming.NamingException;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -22,7 +23,7 @@ import todolist.mallit.Kayttaja;
  *
  * @author ile
  */
-public class Listaus extends HttpServlet {
+public class KayttajaServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -34,39 +35,18 @@ public class Listaus extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException, NamingException, SQLException {
         response.setContentType("text/html;charset=UTF-8");
-        PrintWriter out = response.getWriter();
-        ArrayList<Kayttaja> lista = new ArrayList<Kayttaja>();
-        try {
-            lista = Kayttaja.getKayttajat();
-        } catch (NamingException ex) {
-            Logger.getLogger(Listaus.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
-            Logger.getLogger(Listaus.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        
+        ArrayList<Kayttaja> lista = Kayttaja.getKayttajat();
 
-        try {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet Listaus</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet Listaus at " + request.getContextPath() + "</h1>");
-            out.println("<ul>");
-            for (Kayttaja kayttaja : lista) {
-                out.println("<li> jep "+kayttaja.getNimi()+"</li>");
-            }
-            out.println("Käytäjiä: "+lista.size());
-            out.println("</ul>");
-            out.println("</body>");
-            out.println("</html>");
-
-        } finally {
-            out.close();
-        }
+        request.setAttribute("lista", lista);
+      
+        
+        
+        RequestDispatcher dispatcher = request.getRequestDispatcher("kayttaja.jsp");
+       
+        dispatcher.forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -81,7 +61,13 @@ public class Listaus extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (NamingException ex) {
+            Logger.getLogger(KayttajaServlet.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(KayttajaServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -95,7 +81,13 @@ public class Listaus extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (NamingException ex) {
+            Logger.getLogger(KayttajaServlet.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(KayttajaServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**

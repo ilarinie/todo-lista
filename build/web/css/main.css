@@ -8,9 +8,17 @@ and open the template in the editor.
     Author     : ile
 */
 
-body { padding-top: 40px; }
-@media screen and (max-width: 768px) {
-    body { padding-top: 170px; }
+/*
+Padding navipalkkia varten normaaleille näytöille ja suurempi 
+mobiilia/kapeita ruutuja varten
+*/
+body { 
+    padding-top: 40px;
+}
+@media screen and (max-width: 768px){
+    body { 
+        padding-top: 170px;
+    }
 }
 .col-centered{
     float: none;

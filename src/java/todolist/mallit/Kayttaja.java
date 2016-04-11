@@ -19,7 +19,6 @@ import todolist.tietokanta.Tietokanta;
  */
 public class Kayttaja {
 
-
     private int id;
     private String nimi;
     private String salasana;
@@ -77,13 +76,14 @@ public class Kayttaja {
 
         return kayttajat;
     }
-    public static Kayttaja getKayttaja(String nimi) throws NamingException, SQLException{
+
+    public static Kayttaja getKayttaja(String nimi) throws NamingException, SQLException {
         Connection yhteys = Tietokanta.getYhteys();
-        String sql = "SELECT id, nimi, salasana from Kayttaja WHERE nimi='"+nimi+"';";
+        String sql = "SELECT id, nimi, salasana from Kayttaja WHERE nimi='" + nimi + "';";
         PreparedStatement kysely = yhteys.prepareStatement(sql);
         ResultSet rs = kysely.executeQuery();
-        
-        if (rs.next()){
+
+        if (rs.next()) {
             //Haetaan tietoa riviltä
             Kayttaja k = new Kayttaja();
             k.setId(rs.getInt("id"));
@@ -92,6 +92,15 @@ public class Kayttaja {
             return k;
         } else {
             return null;
-        }  
+        }
+    }
+
+    public static boolean save(Kayttaja k) throws NamingException, SQLException {
+        Connection yhteys = Tietokanta.getYhteys();
+        String sql = "INSERT INTO Kayttaja (nimi, salasana) VALUES (?,?)";
+        PreparedStatement kysely = yhteys.prepareStatement(sql);
+        kysely.setString(1, k.getNimi());
+        kysely.setString(2, k.getSalasana());
+        return kysely.execute();
     }
 }
