@@ -25,7 +25,7 @@
         <nav class="navbar navbar-inverse navbar-fixed-top">
             <div class="container">
                 <ul class="nav navbar-nav">
-                    <li><a href="index.html">Etusivu</a></li>
+                    <li><a href="/todo-lista">Etusivu</a></li>
                     <li><a href="uusitehtava.html">Uusi Tehtävä</a></li>
                     <li><a href="uusikategoria.html">Uusi Kategoria</a></li>
                     <li><a href="kayttajat">Käyttäjälista</a></li>

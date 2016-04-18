@@ -77,9 +77,9 @@ public class Kayttaja {
         return kayttajat;
     }
 
-    public static Kayttaja getKayttaja(String nimi) throws NamingException, SQLException {
+    public static Kayttaja getKayttaja(int id) throws NamingException, SQLException {
         Connection yhteys = Tietokanta.getYhteys();
-        String sql = "SELECT id, nimi, salasana from Kayttaja WHERE nimi='" + nimi + "';";
+        String sql = "SELECT id, nimi, salasana from Kayttaja WHERE id='" + id + "';";
         PreparedStatement kysely = yhteys.prepareStatement(sql);
         ResultSet rs = kysely.executeQuery();
 

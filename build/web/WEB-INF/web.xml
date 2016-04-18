@@ -8,6 +8,10 @@
         <servlet-name>KayttajaServlet</servlet-name>
         <servlet-class>todolist.servlets.KayttajaServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>TehtavaServlet</servlet-name>
+        <servlet-class>todolist.servlets.TehtavaServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Listaus</servlet-name>
         <url-pattern>/Listaus</url-pattern>
@@ -15,6 +19,10 @@
     <servlet-mapping>
         <servlet-name>KayttajaServlet</servlet-name>
         <url-pattern>/kayttajat</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>TehtavaServlet</servlet-name>
+        <url-pattern>/tehtava</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
