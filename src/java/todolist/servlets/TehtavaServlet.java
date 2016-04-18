@@ -17,7 +17,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import todolist.mallit.Kayttaja;
 import todolist.mallit.Tehtava;
 
 /**
@@ -41,7 +40,7 @@ public class TehtavaServlet extends HttpServlet {
 
         ArrayList<Tehtava> lista = Tehtava.findAll();
 
-        request.setAttribute("lista", lista);
+        request.setAttribute("tehtavalista", lista);
 
         RequestDispatcher dispatcher = request.getRequestDispatcher("index.jsp");
 

@@ -15,21 +15,36 @@
                 <th>Tehtävä</th>
                 <th>Prioriteetti</th>
                 <th>Suorita</th>
+                <th>Poista</th>
             </tr>
 
         </thead>
         <tbody>
-            <c:forEach items="${lista}" var="tehtava">
-            <tr>
-                <td>${tehtava.otsikko}</td>
-                <td>${tehtava.prioriteetti}</td>
-                <td><button class="btn btn-primary">suorita</button></td>
-            </tr>
-            </c:forEach>
-        </tbody>
-    </table>
-       
-            
-    
+            <c:forEach items="${tehtavalista}" var="tehtava">
+                <tr>
+                    <td>${tehtava.otsikko}</td>
+                    <td>${tehtava.prioriteetti}</td>
+                    <c:choose>
+                        <c:when test="${tehtava.suoritettu}">
+                            <td>Suoritettu!</td> 
+                        </c:when>    
+                        <c:otherwise>
+                    <form action="SuoritaTehtava" method="post">
+                        <input type="hidden" name="id" value="${tehtava.id}">
+                        <td><button type="submit" class="btn btn-primary">suorita</button></td>
+                    </form>
+                </c:otherwise>
+            </c:choose>
+            <form action="DestroyTehtava" method="post">
+                <input type="hidden" name="id" value="${tehtava.id}">
+                <td><button type="submit" class="btn btn-danger">poista</button></td>
+            </form>
+        </tr>
+    </c:forEach>
+</tbody>
+</table>
+
+
+
 
 </t:pohja>

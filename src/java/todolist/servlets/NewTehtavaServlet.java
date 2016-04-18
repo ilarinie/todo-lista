@@ -8,24 +8,24 @@ package todolist.servlets;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.naming.NamingException;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import todolist.mallit.Kayttaja;
+import todolist.mallit.Tehtava;
+import static todolist.mallit.naytaJSP.asetaVirhe;
+import static todolist.mallit.naytaJSP.naytaJSP;
 
 /**
  *
  * @author ile
  */
-public class KayttajaServlet extends HttpServlet {
+public class NewTehtavaServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -38,17 +38,36 @@ public class KayttajaServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, NamingException, SQLException {
-        response.setContentType("text/html;charset=UTF-8");
-
-        ArrayList<Kayttaja> lista = Kayttaja.getKayttajat();
+        String otsikko = request.getParameter("otsikko");
+        String kuvaus = request.getParameter("kuvaus");
+        String prioriteetti = request.getParameter("prioriteetti");
         
-        System.out.println(lista.size());
-
-        request.setAttribute("lista", lista);
-
-        RequestDispatcher dispatcher = request.getRequestDispatcher("kayttaja.jsp");
-
-        dispatcher.forward(request, response);
+        if (otsikko==null||kuvaus==null||prioriteetti==null){
+                naytaJSP("newtehtava.jsp", request, response);
+                return;
+            }
+        
+        if (otsikko==null||otsikko.equals("")){
+            asetaVirhe("Anna otsikko", request);
+            naytaJSP("newtehtava", request, response);
+        }
+        
+          HttpSession session = request.getSession();
+        Kayttaja kirjautunut = (Kayttaja) session.getAttribute("kirjautunut");
+        
+        if (kirjautunut!=null){
+        
+        if (!Tehtava.save(otsikko, kuvaus, Integer.parseInt(prioriteetti))){
+            System.out.println("joopajoo");
+            response.sendRedirect("index");
+        }
+        else {
+            response.sendRedirect("newtehtava");
+        }
+        }else {
+            asetaVirhe("Kirjaudu ensin sisään",request);
+            naytaJSP("login.jsp", request, response);
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -66,9 +85,9 @@ public class KayttajaServlet extends HttpServlet {
         try {
             processRequest(request, response);
         } catch (NamingException ex) {
-            Logger.getLogger(KayttajaServlet.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(NewTehtavaServlet.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
-            Logger.getLogger(KayttajaServlet.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(NewTehtavaServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -86,9 +105,9 @@ public class KayttajaServlet extends HttpServlet {
         try {
             processRequest(request, response);
         } catch (NamingException ex) {
-            Logger.getLogger(KayttajaServlet.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(NewTehtavaServlet.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
-            Logger.getLogger(KayttajaServlet.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(NewTehtavaServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

@@ -8,7 +8,6 @@ package todolist.servlets;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.naming.NamingException;
@@ -16,13 +15,17 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import todolist.mallit.Kayttaja;
+import todolist.mallit.Tehtava;
+import static todolist.mallit.naytaJSP.asetaVirhe;
+import static todolist.mallit.naytaJSP.naytaJSP;
 
 /**
  *
  * @author ile
  */
-public class Listaus extends HttpServlet {
+public class SuoritaTehtava extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -34,39 +37,26 @@ public class Listaus extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException, NamingException, SQLException {
         response.setContentType("text/html;charset=UTF-8");
-        PrintWriter out = response.getWriter();
-        ArrayList<Kayttaja> lista = new ArrayList<Kayttaja>();
-        try {
-            lista = Kayttaja.getKayttajat();
-        } catch (NamingException ex) {
-            Logger.getLogger(Listaus.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
-            Logger.getLogger(Listaus.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        int id = Integer.parseInt(request.getParameter("id"));
 
-        try {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet Listaus</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet Listaus at " + request.getContextPath() + "</h1>");
-            out.println("<ul>");
-            for (Kayttaja kayttaja : lista) {
-                out.println("<li> jep "+kayttaja.getNimi()+"</li>");
+        HttpSession session = request.getSession();
+        Kayttaja kirjautunut = (Kayttaja) session.getAttribute("kirjautunut");
+
+        if (kirjautunut != null) {
+            if (!Tehtava.update(id)) {
+                response.sendRedirect("index");
+            } else {
+                asetaVirhe("Ongelma suorituksessa", request);
+                response.sendRedirect("index");
             }
-            out.println("Käytäjiä: "+lista.size());
-            out.println("</ul>");
-            out.println("</body>");
-            out.println("</html>");
+        } else {
+            asetaVirhe("Kirjaudu sisään suorittaaksesi.", request);
+            naytaJSP("login.jsp", request, response);
 
-        } finally {
-            out.close();
         }
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -81,7 +71,13 @@ public class Listaus extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (NamingException ex) {
+            Logger.getLogger(SuoritaTehtava.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(SuoritaTehtava.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -95,7 +91,13 @@ public class Listaus extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (NamingException ex) {
+            Logger.getLogger(SuoritaTehtava.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(SuoritaTehtava.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**

@@ -18,13 +18,27 @@ import todolist.tietokanta.Tietokanta;
  * @author ile
  */
 public class Tehtava {
-    
+
     private int id;
     private String otsikko;
     private String kuvaus;
     private int prioriteetti;
+    private boolean suoritettu;
     private Kayttaja kayttaja;
     private ArrayList<Kategoria> kategoriat;
+
+    public Tehtava() {
+    }
+
+    public boolean isSuoritettu() {
+        return suoritettu;
+    }
+
+    public void setSuoritettu(boolean suoritettu) {
+        this.suoritettu = suoritettu;
+    }
+    
+    
 
     public int getId() {
         return id;
@@ -73,12 +87,11 @@ public class Tehtava {
     public void setKategoriat(ArrayList<Kategoria> kategoriat) {
         this.kategoriat = kategoriat;
     }
-    
-    
-    public static ArrayList<Tehtava> findAll() throws SQLException, NamingException{
-        
+
+    public static ArrayList<Tehtava> findAll() throws SQLException, NamingException {
+
         Connection yhteys = Tietokanta.getYhteys();
-        String sql = "SELECT id, otsikko, kuvaus, prioriteetti, kayttaja_id from tehtava";
+        String sql = "SELECT id, otsikko, kuvaus, prioriteetti, kayttaja_id, suoritettu from tehtava";
         PreparedStatement kysely = yhteys.prepareStatement(sql);
         ResultSet rs = kysely.executeQuery();
         ArrayList<Tehtava> tehtavat = new ArrayList<Tehtava>();
@@ -90,13 +103,89 @@ public class Tehtava {
             t.setKuvaus(rs.getString("kuvaus"));
             t.setPrioriteetti(rs.getInt("prioriteetti"));
             t.setKayttaja(Kayttaja.getKayttaja(rs.getInt("id")));
-
+            t.setSuoritettu(rs.getBoolean("suoritettu"));
             tehtavat.add(t);
 
         }
+        try {
+            rs.close();
+        } catch (Exception e) {
+        }
+        try {
+            kysely.close();
+        } catch (Exception e) {
+        }
+        try {
+            yhteys.close();
+        } catch (Exception e) {
+        }
 
         return tehtavat;
+
+    }
+
+    public static boolean save(String otsikko, String kuvaus, int prioriteetti) throws NamingException, SQLException {
+        Connection yhteys = Tietokanta.getYhteys();
+        String sql = "INSERT INTO Tehtava (otsikko, kuvaus, prioriteetti,suoritettu) VALUES (?,?,?,?)";
+        PreparedStatement kysely = yhteys.prepareStatement(sql);
+        kysely.setString(1, otsikko);
+        kysely.setString(2, kuvaus);
+        kysely.setInt(3, prioriteetti);
+        kysely.setBoolean(4, false);
+
+        boolean palautus = kysely.execute();
+
+        try {
+            kysely.close();
+        } catch (Exception e) {
+        }
+        try {
+            yhteys.close();
+        } catch (Exception e) {
+        }
+
+        return palautus;
+
+    }
+
+    public static boolean destroy(int id) throws NamingException, SQLException {
+        Connection yhteys = Tietokanta.getYhteys();
+        String sql = "DELETE FROM Tehtava WHERE id = " + id;
+        PreparedStatement kysely = yhteys.prepareStatement(sql);
+
+        boolean palautus = kysely.execute();
+
+        try {
+            kysely.close();
+        } catch (Exception e) {
+        }
+        try {
+            yhteys.close();
+        } catch (Exception e) {
+        }
+
+        return palautus;
+
+    }
+    public static boolean update(int id) throws NamingException, SQLException{
+         Connection yhteys = Tietokanta.getYhteys();
+        String sql = "UPDATE Tehtava SET suoritettu=true WHERE id = " + id;
+        PreparedStatement kysely = yhteys.prepareStatement(sql);
+
+        boolean palautus = kysely.execute();
+
+        try {
+            kysely.close();
+        } catch (Exception e) {
+        }
+        try {
+            yhteys.close();
+        } catch (Exception e) {
+        }
+
+        return palautus;
+        
         
     }
-    
+
 }

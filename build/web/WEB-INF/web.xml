@@ -12,6 +12,22 @@
         <servlet-name>TehtavaServlet</servlet-name>
         <servlet-class>todolist.servlets.TehtavaServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>NewTehtavaServlet</servlet-name>
+        <servlet-class>todolist.servlets.NewTehtavaServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>LoginServlet</servlet-name>
+        <servlet-class>todolist.servlets.LoginServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DestroyTehtavaServlet</servlet-name>
+        <servlet-class>todolist.servlets.DestroyTehtava</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>SuoritaTehtava</servlet-name>
+        <servlet-class>todolist.servlets.SuoritaTehtava</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Listaus</servlet-name>
         <url-pattern>/Listaus</url-pattern>
@@ -22,7 +38,23 @@
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>TehtavaServlet</servlet-name>
-        <url-pattern>/tehtava</url-pattern>
+        <url-pattern>/index</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>NewTehtavaServlet</servlet-name>
+        <url-pattern>/newtehtava</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>LoginServlet</servlet-name>
+        <url-pattern>/login</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DestroyTehtavaServlet</servlet-name>
+        <url-pattern>/DestroyTehtava</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SuoritaTehtava</servlet-name>
+        <url-pattern>/SuoritaTehtava</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
@@ -30,6 +62,6 @@
         </session-timeout>
     </session-config>
     <welcome-file-list>
-        <welcome-file>index.jsp</welcome-file>
+        <welcome-file>index</welcome-file>
     </welcome-file-list>
 </web-app>

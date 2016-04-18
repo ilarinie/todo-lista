@@ -8,24 +8,22 @@ package todolist.servlets;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.naming.NamingException;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import todolist.mallit.Kayttaja;
+import static todolist.mallit.naytaJSP.asetaVirhe;
+import static todolist.mallit.naytaJSP.naytaJSP;
 
 /**
  *
  * @author ile
  */
-public class KayttajaServlet extends HttpServlet {
+public class LoginServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -37,21 +35,55 @@ public class KayttajaServlet extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException, NamingException, SQLException {
+            throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
 
-        ArrayList<Kayttaja> lista = Kayttaja.getKayttajat();
-        
-        System.out.println(lista.size());
+        String nimi = request.getParameter("nimi");
+        String salasana = request.getParameter("salasana");
 
-        request.setAttribute("lista", lista);
+        if (nimi == null || salasana == null) {
+            naytaJSP("login.jsp", request, response);
+            return;
+        }
 
-        RequestDispatcher dispatcher = request.getRequestDispatcher("kayttaja.jsp");
+        //Tarkistetaan että vaaditut kentät on täytetty:
+        if (nimi == null || nimi.equals("")) {
+            asetaVirhe("Kirjautuminen epäonnistui! Et antanut käyttäjätunnusta.", request);
+            naytaJSP("login.jsp", request, response);
+            return;
+        }
 
-        dispatcher.forward(request, response);
+        /* Välitetään näkymille tieto siitä, mikä tunnus yritti kirjautumista */
+        request.setAttribute("kayttaja", nimi);
+
+        if (salasana == null || salasana.equals("")) {
+            asetaVirhe("Kirjautuminen epäonnistui! Et antanut salasanaa.", request);
+            naytaJSP("login.jsp", request, response);
+            return;
+        }
+        Kayttaja kirjautuja = null;
+
+        try {
+            /*Tarkistetaan onko tunnukset oikeat*/
+            kirjautuja = Kayttaja.etsiKayttajaTunnuksilla(nimi, salasana);
+        } catch (Exception e) {
+            Logger.getLogger(LoginServlet.class.getName()).log(Level.SEVERE, null, e);
+        }
+
+        if (kirjautuja != null) {
+ 
+            HttpSession session = request.getSession();
+      
+            session.setAttribute("kirjautunut", kirjautuja);
+            response.sendRedirect("index");
+
+        } else {
+            asetaVirhe("Käyttäjätunnus tai salasana virheellinen", request);
+            naytaJSP("login.jsp", request, response);
+        }
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+// <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *
@@ -63,13 +95,7 @@ public class KayttajaServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        try {
-            processRequest(request, response);
-        } catch (NamingException ex) {
-            Logger.getLogger(KayttajaServlet.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
-            Logger.getLogger(KayttajaServlet.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        processRequest(request, response);
     }
 
     /**
@@ -83,13 +109,7 @@ public class KayttajaServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        try {
-            processRequest(request, response);
-        } catch (NamingException ex) {
-            Logger.getLogger(KayttajaServlet.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
-            Logger.getLogger(KayttajaServlet.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        processRequest(request, response);
     }
 
     /**

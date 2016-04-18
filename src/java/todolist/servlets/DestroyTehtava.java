@@ -8,24 +8,24 @@ package todolist.servlets;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.naming.NamingException;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import todolist.mallit.Kayttaja;
+import todolist.mallit.Tehtava;
+import static todolist.mallit.naytaJSP.asetaVirhe;
+import static todolist.mallit.naytaJSP.naytaJSP;
 
 /**
  *
  * @author ile
  */
-public class KayttajaServlet extends HttpServlet {
+public class DestroyTehtava extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -40,15 +40,22 @@ public class KayttajaServlet extends HttpServlet {
             throws ServletException, IOException, NamingException, SQLException {
         response.setContentType("text/html;charset=UTF-8");
 
-        ArrayList<Kayttaja> lista = Kayttaja.getKayttajat();
+        int id = Integer.parseInt(request.getParameter("id"));
+        HttpSession session = request.getSession();
+        Kayttaja kirjautunut = (Kayttaja) session.getAttribute("kirjautunut");
         
-        System.out.println(lista.size());
+        if (kirjautunut!=null){
+        if (!Tehtava.destroy(id)) {
+            response.sendRedirect("index");
+        } else {
+            asetaVirhe("poisto epäonnistui", request);
+            response.sendRedirect("index");
+        }
+        }else {
+            asetaVirhe("kirjaudu sisään poistaaksesi todon", request);
+            naytaJSP("login.jsp", request, response);
+        }
 
-        request.setAttribute("lista", lista);
-
-        RequestDispatcher dispatcher = request.getRequestDispatcher("kayttaja.jsp");
-
-        dispatcher.forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -66,9 +73,9 @@ public class KayttajaServlet extends HttpServlet {
         try {
             processRequest(request, response);
         } catch (NamingException ex) {
-            Logger.getLogger(KayttajaServlet.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DestroyTehtava.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
-            Logger.getLogger(KayttajaServlet.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DestroyTehtava.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -86,9 +93,9 @@ public class KayttajaServlet extends HttpServlet {
         try {
             processRequest(request, response);
         } catch (NamingException ex) {
-            Logger.getLogger(KayttajaServlet.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DestroyTehtava.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
-            Logger.getLogger(KayttajaServlet.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DestroyTehtava.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

@@ -73,7 +73,18 @@ public class Kayttaja {
             kayttajat.add(k);
 
         }
-
+        try {
+            rs.close();
+        } catch (Exception e) {
+        }
+        try {
+            kysely.close();
+        } catch (Exception e) {
+        }
+        try {
+            yhteys.close();
+        } catch (Exception e) {
+        }
         return kayttajat;
     }
 
@@ -89,10 +100,35 @@ public class Kayttaja {
             k.setId(rs.getInt("id"));
             k.setNimi(rs.getString("nimi"));
             k.setSalasana(rs.getString("salasana"));
+            try {
+                rs.close();
+            } catch (Exception e) {
+            }
+            try {
+                kysely.close();
+            } catch (Exception e) {
+            }
+            try {
+                yhteys.close();
+            } catch (Exception e) {
+            }
             return k;
         } else {
+            try {
+                rs.close();
+            } catch (Exception e) {
+            }
+            try {
+                kysely.close();
+            } catch (Exception e) {
+            }
+            try {
+                yhteys.close();
+            } catch (Exception e) {
+            }
             return null;
         }
+
     }
 
     public static boolean save(Kayttaja k) throws NamingException, SQLException {
@@ -101,6 +137,61 @@ public class Kayttaja {
         PreparedStatement kysely = yhteys.prepareStatement(sql);
         kysely.setString(1, k.getNimi());
         kysely.setString(2, k.getSalasana());
-        return kysely.execute();
+        boolean palautus = kysely.execute();
+
+        try {
+            kysely.close();
+        } catch (Exception e) {
+        }
+        try {
+            yhteys.close();
+        } catch (Exception e) {
+        }
+
+        return palautus;
+    }
+
+    public static Kayttaja etsiKayttajaTunnuksilla(String kayttaja, String salasana) throws NamingException, SQLException {
+        String sql = "SELECT id,nimi, salasana from Kayttaja where nimi = ? AND salasana = ?";
+        Connection yhteys = Tietokanta.getYhteys();
+        PreparedStatement kysely = yhteys.prepareStatement(sql);
+        kysely.setString(1, kayttaja);
+        kysely.setString(2, salasana);
+        ResultSet rs = kysely.executeQuery();
+
+        //Alustetaan muuttuja, joka sisältää löydetyn käyttäjän
+        Kayttaja kirjautunut = null;
+
+        //next-metodia on kutsuttava aina, kun käsitellään 
+        //vasta kannasta saatuja ResultSet-olioita.
+        //ResultSet on oletuksena ensimmäistä edeltävällä -1:llä rivillä.
+        //Kun sitä kutsuu ensimmäisen kerran siirtyy se ensimmäiselle riville 0.
+        //Samalla metodi myös palauttaa tiedon siitä onko seuraavaa riviä olemassa.
+        if (rs.next()) {
+            //Kutsutaan sopivat tiedot vastaanottavaa konstruktoria 
+            //ja asetetaan palautettava olio:
+            kirjautunut = new Kayttaja();
+            kirjautunut.setId(rs.getInt("id"));
+            kirjautunut.setNimi(rs.getString("nimi"));
+            kirjautunut.setSalasana(rs.getString("salasana"));
+        }
+
+        //Jos kysely ei tuottanut tuloksia käyttäjä on nyt vielä null.
+        //Suljetaan kaikki resurssit:
+        try {
+            rs.close();
+        } catch (Exception e) {
+        }
+        try {
+            kysely.close();
+        } catch (Exception e) {
+        }
+        try {
+            yhteys.close();
+        } catch (Exception e) {
+        }
+
+        //Käyttäjä palautetaan vasta täällä, kun resurssit on suljettu onnistuneesti.
+        return kirjautunut;
     }
 }
