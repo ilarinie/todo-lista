@@ -7,7 +7,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
-<t:pohja pageTitle="Kirjaudu">
+<t:login>
     <div class="col-md-5 col-centered">
         <h1>KIRJAUDU SISÄÄN</h1>
         <form action="login" method="post">
@@ -17,4 +17,4 @@
         </form>
     </div>
 
-</t:pohja>
+</t:login>

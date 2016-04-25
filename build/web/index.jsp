@@ -13,6 +13,7 @@
         <thead>
             <tr>
                 <th>Tehtävä</th>
+                <th>Käyttäjä</th>
                 <th>Prioriteetti</th>
                 <th>Suorita</th>
                 <th>Poista</th>
@@ -22,7 +23,8 @@
         <tbody>
             <c:forEach items="${tehtavalista}" var="tehtava">
                 <tr>
-                    <td>${tehtava.otsikko}</td>
+                    <td><a href="tehtava?id=${tehtava.id}">${tehtava.otsikko}</a></td>
+                    <td><a href="kayttaja?id=${tehtava.kayttaja.id}">${tehtava.kayttaja.nimi}</a></td>
                     <td>${tehtava.prioriteetti}</td>
                     <c:choose>
                         <c:when test="${tehtava.suoritettu}">

@@ -9,6 +9,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.naming.NamingException;
@@ -17,17 +19,13 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import todolist.mallit.Kayttaja;
-import todolist.mallit.Tehtava;
-import static todolist.mallit.naytaJSP.asetaVirhe;
-import static todolist.mallit.naytaJSP.naytaJSP;
 
 /**
  *
  * @author ile
  */
-public class TehtavaServlet extends HttpServlet {
+public class KayttajatServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -39,25 +37,18 @@ public class TehtavaServlet extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException, SQLException, NamingException {
-          response.setContentType("text/html;charset=UTF-8");
-         HttpSession session = request.getSession();
-        Kayttaja kirjautunut = (Kayttaja) session.getAttribute("kirjautunut");
-        
-        if (kirjautunut!=null){
-        
-        ArrayList<Tehtava> lista = Tehtava.findAll();
+            throws ServletException, IOException, NamingException, SQLException {
+        response.setContentType("text/html;charset=UTF-8");
 
-        request.setAttribute("tehtavalista", lista);
+        ArrayList<Kayttaja> lista = Kayttaja.getKayttajat();
+        
+        System.out.println(lista.size());
 
-        RequestDispatcher dispatcher = request.getRequestDispatcher("index.jsp");
+        request.setAttribute("lista", lista);
+
+        RequestDispatcher dispatcher = request.getRequestDispatcher("kayttajat.jsp");
 
         dispatcher.forward(request, response);
-        }else {
-            asetaVirhe("Kirjaudu ensin sisään", request);
-            naytaJSP("login.jsp", request, response);
-        }
-        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -74,10 +65,10 @@ public class TehtavaServlet extends HttpServlet {
             throws ServletException, IOException {
         try {
             processRequest(request, response);
-        } catch (SQLException ex) {
-            Logger.getLogger(TehtavaServlet.class.getName()).log(Level.SEVERE, null, ex);
         } catch (NamingException ex) {
-            Logger.getLogger(TehtavaServlet.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(KayttajatServlet.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(KayttajatServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -94,10 +85,10 @@ public class TehtavaServlet extends HttpServlet {
             throws ServletException, IOException {
         try {
             processRequest(request, response);
-        } catch (SQLException ex) {
-            Logger.getLogger(TehtavaServlet.class.getName()).log(Level.SEVERE, null, ex);
         } catch (NamingException ex) {
-            Logger.getLogger(TehtavaServlet.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(KayttajatServlet.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(KayttajatServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

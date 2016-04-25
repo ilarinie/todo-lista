@@ -1,13 +1,13 @@
 <%-- 
-    Document   : pohja
-    Created on : Apr 8, 2016, 9:24:02 PM
+    Document   : login
+    Created on : Apr 25, 2016, 8:58:20 PM
     Author     : ile
 --%>
 
 <%@tag description="Pohja TODO-LISTA sivuille" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c"  uri="http://java.sun.com/jsp/jstl/core" %>
 <%-- The list of normal or fragment attributes can be specified here: --%>
-<%@attribute name="pageTitle"%>
+<%@attribute name="Login"%>
 <!DOCTYPE html>
 <html>
     <head>
@@ -25,11 +25,8 @@
         <nav class="navbar navbar-inverse navbar-fixed-top">
             <div class="container">
                 <ul class="nav navbar-nav">
-                    <li><a href="/todo-lista">Etusivu</a></li>
-                    <li><a href="newtehtava">Uusi Tehtävä</a></li>
-                    <li><a href="uusikategoria.html">Uusi Kategoria</a></li>
-                    <li><a href="kayttajat">Käyttäjälista</a></li>
-                    <li><a href="login">Logout</a></li>
+                    <li><a href="newkayttaja">Sign up</a></li>
+                    <li><a href="login">Login</a></li>
                 </ul>
             </div>
         </nav>

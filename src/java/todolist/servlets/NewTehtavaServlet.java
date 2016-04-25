@@ -41,31 +41,28 @@ public class NewTehtavaServlet extends HttpServlet {
         String otsikko = request.getParameter("otsikko");
         String kuvaus = request.getParameter("kuvaus");
         String prioriteetti = request.getParameter("prioriteetti");
-        
-        if (otsikko==null||kuvaus==null||prioriteetti==null){
+        HttpSession session = request.getSession();
+        Kayttaja kirjautunut = (Kayttaja) session.getAttribute("kirjautunut");
+
+        if (kirjautunut != null) {
+
+            if (otsikko == null || kuvaus == null || prioriteetti == null) {
                 naytaJSP("newtehtava.jsp", request, response);
                 return;
             }
-        
-        if (otsikko==null||otsikko.equals("")){
-            asetaVirhe("Anna otsikko", request);
-            naytaJSP("newtehtava", request, response);
-        }
-        
-          HttpSession session = request.getSession();
-        Kayttaja kirjautunut = (Kayttaja) session.getAttribute("kirjautunut");
-        
-        if (kirjautunut!=null){
-        
-        if (!Tehtava.save(otsikko, kuvaus, Integer.parseInt(prioriteetti))){
-            System.out.println("joopajoo");
-            response.sendRedirect("index");
-        }
-        else {
-            response.sendRedirect("newtehtava");
-        }
-        }else {
-            asetaVirhe("Kirjaudu ensin sisään",request);
+
+            if (otsikko == null || otsikko.equals("")) {
+                asetaVirhe("Anna otsikko", request);
+                naytaJSP("newtehtava", request, response);
+            }
+
+            if (!Tehtava.save(otsikko, kuvaus, Integer.parseInt(prioriteetti),kirjautunut.getId())) {
+                response.sendRedirect("index");
+            } else {
+                response.sendRedirect("newtehtava");
+            }
+        } else {
+            asetaVirhe("Kirjaudu ensin sisään", request);
             naytaJSP("login.jsp", request, response);
         }
     }

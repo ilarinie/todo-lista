@@ -130,13 +130,59 @@ public class Kayttaja {
         }
 
     }
+        public static Kayttaja getKayttajaNimella(String nimi) throws NamingException, SQLException {
+        Connection yhteys = Tietokanta.getYhteys();
+        String sql = "SELECT * from Kayttaja WHERE nimi='" + nimi + "';";
+        PreparedStatement kysely = yhteys.prepareStatement(sql);
+        ResultSet rs = kysely.executeQuery();
 
-    public static boolean save(Kayttaja k) throws NamingException, SQLException {
+        if (rs.next()) {
+            //Haetaan tietoa riviltä
+            Kayttaja k = new Kayttaja();
+            k.setId(rs.getInt("id"));
+            k.setNimi(rs.getString("nimi"));
+            k.setSalasana(rs.getString("salasana"));
+            try {
+                rs.close();
+            } catch (Exception e) {
+            }
+            try {
+                kysely.close();
+            } catch (Exception e) {
+            }
+            try {
+                yhteys.close();
+            } catch (Exception e) {
+            }
+            return k;
+        } else {
+            try {
+                rs.close();
+            } catch (Exception e) {
+            }
+            try {
+                kysely.close();
+            } catch (Exception e) {
+            }
+            try {
+                yhteys.close();
+            } catch (Exception e) {
+            }
+            return null;
+        }
+
+    }
+
+    public static boolean save(String nimi, String salasana) throws NamingException, SQLException {
+        if (getKayttajaNimella(nimi) != null){
+            return true;
+        }
+        
         Connection yhteys = Tietokanta.getYhteys();
         String sql = "INSERT INTO Kayttaja (nimi, salasana) VALUES (?,?)";
         PreparedStatement kysely = yhteys.prepareStatement(sql);
-        kysely.setString(1, k.getNimi());
-        kysely.setString(2, k.getSalasana());
+        kysely.setString(1, nimi);
+        kysely.setString(2, salasana);
         boolean palautus = kysely.execute();
 
         try {
