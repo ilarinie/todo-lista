@@ -10,23 +10,38 @@
     <h1>${tehtava.otsikko}</h1>
     <p>${tehtava.kayttaja}</p>
     <div class="col-md-5">
-        <h3>Kuvaus<h3>
-                <p>${tehtava.kuvaus}</p>
-                <h3>Suorita:</h3>
-                <p>
-                    <c:choose>
-                        <c:when test="${tehtava.suoritettu}">
-                        Suoritettu!
-                    </c:when>    
-                    <c:otherwise>
-                        <form action="SuoritaTehtava" method="post">
-                            <input type="hidden" name="id" value="${tehtava.id}">
-                            <button type="submit" class="btn btn-primary">suorita</button>
-                        </form>
-                    </c:otherwise>
-                </c:choose>
-                </p>
-                </div>
+        <h3>Kuvaus</h3>
+        <p>${tehtava.kuvaus}</p>
+        <h3>Kategoriat:</h3>
+        <c:forEach items="${tehtava.kategoriat}" var="kategoria">
+            <a href="kategoria?id=${kategoria.id}"><span class="label label-default">${kategoria.otsikko}</span></a>
+            </c:forEach>
+
+        <h3>Suorita:</h3>
+        <p>
+            <c:choose>
+                <c:when test="${tehtava.suoritettu}">
+                    Suoritettu!
+                </c:when>    
+                <c:otherwise>
+                <form action="SuoritaTehtava" method="post">
+                    <input type="hidden" name="id" value="${tehtava.id}">
+                    <button type="submit" class="btn btn-primary">suorita</button>
+                </form>
+            </c:otherwise>
+        </c:choose>
+    </p>
+
+    <div class="dropdown">
+        <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Lisää Kategoria
+            <span class="caret"></span></button>
+        <ul class="dropdown-menu">
+            <c:forEach items="${lisattavat}" var="kat">
+                <li><a href="lisaakategoria?tid=${tehtava.id}&kid=${kat.id}">${kat.otsikko}</a></li>
+                </c:forEach>
+        </ul>
+    </div>
+</div>
 
 
-            </t:pohja>
+</t:pohja>

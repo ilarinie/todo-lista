@@ -25,7 +25,7 @@ import static todolist.mallit.naytaJSP.naytaJSP;
  *
  * @author ile
  */
-public class NewTehtavaServlet extends HttpServlet {
+public class LisaaKategoriaServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -38,36 +38,26 @@ public class NewTehtavaServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, NamingException, SQLException {
-        String otsikko = request.getParameter("otsikko");
-        String kuvaus = request.getParameter("kuvaus");
-        String prioriteetti = request.getParameter("prioriteetti");
-        HttpSession session = request.getSession();
+        response.setContentType("text/html;charset=UTF-8");
+        int tid = Integer.parseInt(request.getParameter("tid"));
+        int kid = Integer.parseInt(request.getParameter("kid"));
+        
+        
+         HttpSession session = request.getSession();
         Kayttaja kirjautunut = (Kayttaja) session.getAttribute("kirjautunut");
-
-        if (kirjautunut != null) {
-
-            if (otsikko == null || kuvaus == null || prioriteetti == null) {
-                naytaJSP("newtehtava.jsp", request, response);
-                return;
+        
+        if (kirjautunut!=null){
+            
+            if (!Tehtava.addKategoria(tid, kid)){
+                response.sendRedirect(request.getHeader("referer"));
             }
-
-            if (otsikko.equals("")) {
-                asetaVirhe("Anna otsikko", request);
-                naytaJSP("newtehtava", request, response);
-            }
-            if (kuvaus.equals("")){
-                asetaVirhe("Anna kuvaus", request);
-                naytaJSP("newtehtava", request, response);
+            else {
+                asetaVirhe("virhe kategorian lisäämisessä", request);
+                response.sendRedirect(request.getHeader("referer"));
             }
             
-            int tid = Tehtava.save(otsikko, kuvaus, Integer.parseInt(prioriteetti),kirjautunut.getId());
-            System.out.println(tid);
-            if (tid != 0) {
-                response.sendRedirect("tehtava?id="+tid);
-            } else {
-                response.sendRedirect("newtehtava");
-            }
-        } else {
+            
+        }else {
             asetaVirhe("Kirjaudu ensin sisään", request);
             naytaJSP("login.jsp", request, response);
         }
@@ -88,9 +78,9 @@ public class NewTehtavaServlet extends HttpServlet {
         try {
             processRequest(request, response);
         } catch (NamingException ex) {
-            Logger.getLogger(NewTehtavaServlet.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(LisaaKategoriaServlet.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
-            Logger.getLogger(NewTehtavaServlet.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(LisaaKategoriaServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -108,9 +98,9 @@ public class NewTehtavaServlet extends HttpServlet {
         try {
             processRequest(request, response);
         } catch (NamingException ex) {
-            Logger.getLogger(NewTehtavaServlet.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(LisaaKategoriaServlet.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
-            Logger.getLogger(NewTehtavaServlet.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(LisaaKategoriaServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

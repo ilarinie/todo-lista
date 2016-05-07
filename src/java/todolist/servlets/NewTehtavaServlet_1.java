@@ -51,19 +51,13 @@ public class NewTehtavaServlet extends HttpServlet {
                 return;
             }
 
-            if (otsikko.equals("")) {
+            if (otsikko == null || otsikko.equals("")) {
                 asetaVirhe("Anna otsikko", request);
                 naytaJSP("newtehtava", request, response);
             }
-            if (kuvaus.equals("")){
-                asetaVirhe("Anna kuvaus", request);
-                naytaJSP("newtehtava", request, response);
-            }
-            
-            int tid = Tehtava.save(otsikko, kuvaus, Integer.parseInt(prioriteetti),kirjautunut.getId());
-            System.out.println(tid);
-            if (tid != 0) {
-                response.sendRedirect("tehtava?id="+tid);
+
+            if (!Tehtava.save(otsikko, kuvaus, Integer.parseInt(prioriteetti),kirjautunut.getId())) {
+                response.sendRedirect("index");
             } else {
                 response.sendRedirect("newtehtava");
             }

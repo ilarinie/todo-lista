@@ -17,6 +17,10 @@
         <servlet-class>todolist.servlets.NewTehtavaServlet</servlet-class>
     </servlet>
     <servlet>
+        <servlet-name>NewKategoriaServlet</servlet-name>
+        <servlet-class>todolist.servlets.NewKategoriaServlet</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>LoginServlet</servlet-name>
         <servlet-class>todolist.servlets.LoginServlet</servlet-class>
     </servlet>
@@ -40,6 +44,14 @@
         <servlet-name>NewKayttajaServlet</servlet-name>
         <servlet-class>todolist.servlets.NewKayttajaServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>KategoriaServlet</servlet-name>
+        <servlet-class>todolist.servlets.KategoriaServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>LisaaKategoriaServlet</servlet-name>
+        <servlet-class>todolist.servlets.LisaaKategoriaServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Listaus</servlet-name>
         <url-pattern>/Listaus</url-pattern>
@@ -55,6 +67,10 @@
     <servlet-mapping>
         <servlet-name>NewTehtavaServlet</servlet-name>
         <url-pattern>/newtehtava</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>NewKategoriaServlet</servlet-name>
+        <url-pattern>/newkategoria</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>LoginServlet</servlet-name>
@@ -79,6 +95,14 @@
     <servlet-mapping>
         <servlet-name>NewKayttajaServlet</servlet-name>
         <url-pattern>/newkayttaja</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>KategoriaServlet</servlet-name>
+        <url-pattern>/kategoria</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>LisaaKategoriaServlet</servlet-name>
+        <url-pattern>/lisaakategoria</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

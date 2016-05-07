@@ -46,10 +46,10 @@ public class SuoritaTehtava extends HttpServlet {
 
         if (kirjautunut != null) {
             if (!Tehtava.update(id)) {
-                response.sendRedirect("index");
+                response.sendRedirect(request.getHeader("referer"));
             } else {
                 asetaVirhe("Ongelma suorituksessa", request);
-                response.sendRedirect("index");
+                response.sendRedirect(request.getHeader("referer"));
             }
         } else {
             asetaVirhe("Kirjaudu sisään suorittaaksesi.", request);

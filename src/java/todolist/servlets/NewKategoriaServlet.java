@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import todolist.mallit.Kategoria;
 import todolist.mallit.Kayttaja;
 import todolist.mallit.Tehtava;
 import static todolist.mallit.naytaJSP.asetaVirhe;
@@ -25,7 +26,7 @@ import static todolist.mallit.naytaJSP.naytaJSP;
  *
  * @author ile
  */
-public class NewTehtavaServlet extends HttpServlet {
+public class NewKategoriaServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -39,33 +40,25 @@ public class NewTehtavaServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, NamingException, SQLException {
         String otsikko = request.getParameter("otsikko");
-        String kuvaus = request.getParameter("kuvaus");
-        String prioriteetti = request.getParameter("prioriteetti");
         HttpSession session = request.getSession();
         Kayttaja kirjautunut = (Kayttaja) session.getAttribute("kirjautunut");
 
         if (kirjautunut != null) {
 
-            if (otsikko == null || kuvaus == null || prioriteetti == null) {
-                naytaJSP("newtehtava.jsp", request, response);
+            if (otsikko == null) {
+                naytaJSP("newkategoria.jsp", request, response);
                 return;
             }
 
-            if (otsikko.equals("")) {
+            if (otsikko == null || otsikko.equals("")) {
                 asetaVirhe("Anna otsikko", request);
-                naytaJSP("newtehtava", request, response);
+                naytaJSP("newkategoria.jsp", request, response);
             }
-            if (kuvaus.equals("")){
-                asetaVirhe("Anna kuvaus", request);
-                naytaJSP("newtehtava", request, response);
-            }
-            
-            int tid = Tehtava.save(otsikko, kuvaus, Integer.parseInt(prioriteetti),kirjautunut.getId());
-            System.out.println(tid);
-            if (tid != 0) {
-                response.sendRedirect("tehtava?id="+tid);
+
+            if (!Kategoria.save(otsikko)) {
+                response.sendRedirect("index");
             } else {
-                response.sendRedirect("newtehtava");
+                response.sendRedirect("newkategoria");
             }
         } else {
             asetaVirhe("Kirjaudu ensin sisään", request);

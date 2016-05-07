@@ -8,6 +8,7 @@ package todolist.servlets;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.naming.NamingException;
@@ -15,6 +16,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import todolist.mallit.Kategoria;
 import todolist.mallit.Tehtava;
 import static todolist.mallit.naytaJSP.asetaVirhe;
 import static todolist.mallit.naytaJSP.naytaJSP;
@@ -47,6 +49,12 @@ public class ShowTehtavaServlet extends HttpServlet {
         }
         Tehtava tehtava = Tehtava.find(id);
         if (tehtava != null) {
+            ArrayList<Kategoria> lisattavat = Kategoria.findAll();
+            System.out.println(lisattavat.size());
+            lisattavat.removeAll(tehtava.getKategoriat());
+            System.out.println(tehtava.getKategoriat().size());
+            System.out.println(lisattavat.size());
+            request.setAttribute("lisattavat", lisattavat);
             request.setAttribute("tehtava", tehtava);
             naytaJSP("tehtava.jsp", request, response);
         } else {

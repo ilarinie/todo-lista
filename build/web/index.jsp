@@ -15,6 +15,7 @@
                 <th>Tehtävä</th>
                 <th>Käyttäjä</th>
                 <th>Prioriteetti</th>
+                <th>Kategoriat</th>
                 <th>Suorita</th>
                 <th>Poista</th>
             </tr>
@@ -26,6 +27,9 @@
                     <td><a href="tehtava?id=${tehtava.id}">${tehtava.otsikko}</a></td>
                     <td><a href="kayttaja?id=${tehtava.kayttaja.id}">${tehtava.kayttaja.nimi}</a></td>
                     <td>${tehtava.prioriteetti}</td>
+                    <td><c:forEach items="${tehtava.kategoriat}" var="kategoria">
+                            <a href="kategoria?id=${kategoria.id}"><span class="label label-default">${kategoria.otsikko}</span></a>
+                        </c:forEach></td>
                     <c:choose>
                         <c:when test="${tehtava.suoritettu}">
                             <td>Suoritettu!</td> 

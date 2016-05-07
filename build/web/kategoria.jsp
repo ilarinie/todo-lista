@@ -1,15 +1,17 @@
 <%-- 
-    Document   : index
-    Created on : Mar 20, 2016, 12:37:22 PM
+    Document   : tehtava
+    Created on : Apr 25, 2016, 7:39:09 PM
     Author     : ile
 --%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
-<t:pohja pageTitle="Todo-lista">
-
-    <h2>Todo-lista</h2>
-    <table class="table table-hover">
+<t:pohja pageTitle="Kategoria">
+    <h1>${kategoria.otsikko}</h1>
+    
+    <h2>Kategoriaan kuuluvat tehtävät</h2>
+    
+     <table class="table table-hover">
         <thead>
             <tr>
                 <th>Tehtävä</th>
@@ -49,8 +51,6 @@
     </c:forEach>
 </tbody>
 </table>
-
-
 
 
 </t:pohja>

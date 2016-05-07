@@ -27,7 +27,8 @@
                 <ul class="nav navbar-nav">
                     <li><a href="/todo-lista">Etusivu</a></li>
                     <li><a href="newtehtava">Uusi Tehtävä</a></li>
-                    <li><a href="uusikategoria.html">Uusi Kategoria</a></li>
+                    <li><a href="newkategoria">Uusi Kategoria</a></li>
+                    <li><a href="kategoria">Kategoriat</a></li>
                     <li><a href="kayttajat">Käyttäjälista</a></li>
                     <li><a href="login">Logout</a></li>
                 </ul>
