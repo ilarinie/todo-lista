@@ -22,11 +22,13 @@ public class Kayttaja {
     private int id;
     private String nimi;
     private String salasana;
+    private boolean admin;
 
-    public Kayttaja(int id, String tunnus, String salasana) {
+    public Kayttaja(int id, String tunnus, String salasana, boolean admin) {
         this.id = id;
         this.nimi = tunnus;
         this.salasana = salasana;
+        this.admin = admin;
     }
 
     public Kayttaja() {
@@ -57,9 +59,19 @@ public class Kayttaja {
         this.salasana = salasana;
     }
 
+    public boolean isAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(boolean admin) {
+        this.admin = admin;
+    }
+    
+    
+
     public static ArrayList<Kayttaja> getKayttajat() throws NamingException, SQLException {
         Connection yhteys = Tietokanta.getYhteys();
-        String sql = "SELECT id, nimi, salasana from Kayttaja";
+        String sql = "SELECT id, nimi, salasana, admin from Kayttaja";
         PreparedStatement kysely = yhteys.prepareStatement(sql);
         ResultSet rs = kysely.executeQuery();
         ArrayList<Kayttaja> kayttajat = new ArrayList<Kayttaja>();
@@ -69,6 +81,7 @@ public class Kayttaja {
             k.setId(rs.getInt("id"));
             k.setNimi(rs.getString("nimi"));
             k.setSalasana(rs.getString("salasana"));
+            k.setAdmin(rs.getBoolean("admin"));
 
             kayttajat.add(k);
 
@@ -90,7 +103,7 @@ public class Kayttaja {
 
     public static Kayttaja getKayttaja(int id) throws NamingException, SQLException {
         Connection yhteys = Tietokanta.getYhteys();
-        String sql = "SELECT id, nimi, salasana from Kayttaja WHERE id='" + id + "';";
+        String sql = "SELECT id, nimi, salasana, admin from Kayttaja WHERE id=" + id + ";";
         PreparedStatement kysely = yhteys.prepareStatement(sql);
         ResultSet rs = kysely.executeQuery();
 
@@ -100,6 +113,7 @@ public class Kayttaja {
             k.setId(rs.getInt("id"));
             k.setNimi(rs.getString("nimi"));
             k.setSalasana(rs.getString("salasana"));
+            k.setAdmin(rs.getBoolean("admin"));
             try {
                 rs.close();
             } catch (Exception e) {
@@ -130,7 +144,8 @@ public class Kayttaja {
         }
 
     }
-        public static Kayttaja getKayttajaNimella(String nimi) throws NamingException, SQLException {
+
+    public static Kayttaja getKayttajaNimella(String nimi) throws NamingException, SQLException {
         Connection yhteys = Tietokanta.getYhteys();
         String sql = "SELECT * from Kayttaja WHERE nimi='" + nimi + "';";
         PreparedStatement kysely = yhteys.prepareStatement(sql);
@@ -142,6 +157,7 @@ public class Kayttaja {
             k.setId(rs.getInt("id"));
             k.setNimi(rs.getString("nimi"));
             k.setSalasana(rs.getString("salasana"));
+            k.setAdmin(rs.getBoolean("admin"));
             try {
                 rs.close();
             } catch (Exception e) {
@@ -174,15 +190,16 @@ public class Kayttaja {
     }
 
     public static boolean save(String nimi, String salasana) throws NamingException, SQLException {
-        if (getKayttajaNimella(nimi) != null){
+        if (getKayttajaNimella(nimi) != null) {
             return true;
         }
-        
+
         Connection yhteys = Tietokanta.getYhteys();
-        String sql = "INSERT INTO Kayttaja (nimi, salasana) VALUES (?,?)";
+        String sql = "INSERT INTO Kayttaja (nimi, salasana) VALUES (?,?,?)";
         PreparedStatement kysely = yhteys.prepareStatement(sql);
         kysely.setString(1, nimi);
         kysely.setString(2, salasana);
+        kysely.setBoolean(3, false);
         boolean palautus = kysely.execute();
 
         try {
@@ -198,7 +215,7 @@ public class Kayttaja {
     }
 
     public static Kayttaja etsiKayttajaTunnuksilla(String kayttaja, String salasana) throws NamingException, SQLException {
-        String sql = "SELECT id,nimi, salasana from Kayttaja where nimi = ? AND salasana = ?";
+        String sql = "SELECT id,nimi, salasana, admin from Kayttaja where nimi = ? AND salasana = ?";
         Connection yhteys = Tietokanta.getYhteys();
         PreparedStatement kysely = yhteys.prepareStatement(sql);
         kysely.setString(1, kayttaja);
@@ -220,6 +237,8 @@ public class Kayttaja {
             kirjautunut.setId(rs.getInt("id"));
             kirjautunut.setNimi(rs.getString("nimi"));
             kirjautunut.setSalasana(rs.getString("salasana"));
+            kirjautunut.setAdmin(rs.getBoolean("admin"));
+            
         }
 
         //Jos kysely ei tuottanut tuloksia käyttäjä on nyt vielä null.
@@ -239,5 +258,29 @@ public class Kayttaja {
 
         //Käyttäjä palautetaan vasta täällä, kun resurssit on suljettu onnistuneesti.
         return kirjautunut;
+    }
+    
+      public static boolean destroy(int id, int tuhoojaId) throws NamingException, SQLException {
+        if (Kayttaja.getKayttaja(tuhoojaId).isAdmin()){
+        Connection yhteys = Tietokanta.getYhteys();
+        String sql = "DELETE FROM Kayttaja WHERE id ="+id+";";
+        PreparedStatement kysely = yhteys.prepareStatement(sql);
+
+        boolean palautus = kysely.execute();
+
+        try {
+            kysely.close();
+        } catch (Exception e) {
+        }
+        try {
+            yhteys.close();
+        } catch (Exception e) {
+        }
+
+        return palautus;
+        }
+        else {
+            return true;
+        }
     }
 }

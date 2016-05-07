@@ -16,7 +16,9 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import todolist.mallit.Kategoria;
+import todolist.mallit.Kayttaja;
 import todolist.mallit.Tehtava;
 import static todolist.mallit.naytaJSP.asetaVirhe;
 import static todolist.mallit.naytaJSP.naytaJSP;
@@ -41,26 +43,34 @@ public class ShowTehtavaServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         String idParam = request.getParameter("id");
         int id;
+        HttpSession session = request.getSession();
+        Kayttaja kirjautunut = (Kayttaja) session.getAttribute("kirjautunut");
 
-        try {
-            id = Integer.parseInt(idParam);
-        } catch (Exception e) {
-            id = 0;
-        }
-        Tehtava tehtava = Tehtava.find(id);
-        if (tehtava != null) {
-            ArrayList<Kategoria> lisattavat = Kategoria.findAll();
-            System.out.println(lisattavat.size());
-            lisattavat.removeAll(tehtava.getKategoriat());
-            System.out.println(tehtava.getKategoriat().size());
-            System.out.println(lisattavat.size());
-            request.setAttribute("lisattavat", lisattavat);
-            request.setAttribute("tehtava", tehtava);
-            naytaJSP("tehtava.jsp", request, response);
+        if (kirjautunut != null) {
+
+            try {
+                id = Integer.parseInt(idParam);
+            } catch (Exception e) {
+                id = 0;
+            }
+            Tehtava tehtava = Tehtava.find(id);
+            if (tehtava != null) {
+                ArrayList<Kategoria> lisattavat = Kategoria.etsiKayttajanKategoriat(kirjautunut.getId());
+                System.out.println(lisattavat.size());
+                lisattavat.removeAll(tehtava.getKategoriat());
+                System.out.println(tehtava.getKategoriat().size());
+                System.out.println(lisattavat.size());
+                request.setAttribute("lisattavat", lisattavat);
+                request.setAttribute("tehtava", tehtava);
+                naytaJSP("tehtava.jsp", request, response);
+            } else {
+                request.setAttribute("tehtava", null);
+                asetaVirhe("Tehtävää ei löytynyt", request);
+                naytaJSP("tehtava.jsp", request, response);
+            }
         } else {
-            request.setAttribute("tehtava", null);
-            asetaVirhe("Tehtävää ei löytynyt", request);
-            naytaJSP("tehtava.jsp", request, response);
+            asetaVirhe("Kirjaudu ensin sisään", request);
+            naytaJSP("login.jsp", request, response);
         }
 
     }

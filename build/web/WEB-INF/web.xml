@@ -52,6 +52,10 @@
         <servlet-name>LisaaKategoriaServlet</servlet-name>
         <servlet-class>todolist.servlets.LisaaKategoriaServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>DestroyKayttajaServlet</servlet-name>
+        <servlet-class>todolist.servlets.DestroyKayttajaServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Listaus</servlet-name>
         <url-pattern>/Listaus</url-pattern>
@@ -103,6 +107,10 @@
     <servlet-mapping>
         <servlet-name>LisaaKategoriaServlet</servlet-name>
         <url-pattern>/lisaakategoria</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DestroyKayttajaServlet</servlet-name>
+        <url-pattern>/destroykayttaja</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

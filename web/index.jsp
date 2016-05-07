@@ -13,7 +13,6 @@
         <thead>
             <tr>
                 <th>Tehtävä</th>
-                <th>Käyttäjä</th>
                 <th>Prioriteetti</th>
                 <th>Kategoriat</th>
                 <th>Suorita</th>
@@ -25,7 +24,6 @@
             <c:forEach items="${tehtavalista}" var="tehtava">
                 <tr>
                     <td><a href="tehtava?id=${tehtava.id}">${tehtava.otsikko}</a></td>
-                    <td><a href="kayttaja?id=${tehtava.kayttaja.id}">${tehtava.kayttaja.nimi}</a></td>
                     <td>${tehtava.prioriteetti}</td>
                     <td><c:forEach items="${tehtava.kategoriat}" var="kategoria">
                             <a href="kategoria?id=${kategoria.id}"><span class="label label-default">${kategoria.otsikko}</span></a>

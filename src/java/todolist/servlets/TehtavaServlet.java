@@ -46,7 +46,7 @@ public class TehtavaServlet extends HttpServlet {
         
         if (kirjautunut!=null){
         
-        ArrayList<Tehtava> lista = Tehtava.findAll();
+        ArrayList<Tehtava> lista = Tehtava.etsiKayttajanTehtavat(kirjautunut.getId());
 
         request.setAttribute("tehtavalista", lista);
 

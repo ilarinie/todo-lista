@@ -20,16 +20,18 @@ import todolist.tietokanta.Tietokanta;
  * @author ile
  */
 public class Kategoria {
-    
+
     private String otsikko;
+    private int kayttajaId;
     private int id;
 
     public Kategoria() {
     }
 
-    public Kategoria(String otsikko, int id) {
+    public Kategoria(String otsikko, int id, int kayttajaId) {
         this.otsikko = otsikko;
         this.id = id;
+        this.kayttajaId = kayttajaId;
     }
 
     public int getId() {
@@ -40,7 +42,13 @@ public class Kategoria {
         this.id = id;
     }
 
-    
+    public int getKayttajaId() {
+        return kayttajaId;
+    }
+
+    public void setKayttajaId(int kayttajaId) {
+        this.kayttajaId = kayttajaId;
+    }
 
     public String getOtsikko() {
         return otsikko;
@@ -49,13 +57,13 @@ public class Kategoria {
     public void setOtsikko(String otsikko) {
         this.otsikko = otsikko;
     }
-    
-     public static boolean save(String otsikko) throws NamingException, SQLException {
+
+    public static boolean save(String otsikko, int kayttajaId) throws NamingException, SQLException {
         Connection yhteys = Tietokanta.getYhteys();
-        String sql = "INSERT INTO Kategoria (otsikko) VALUES (?)";
+        String sql = "INSERT INTO Kategoria (otsikko, kayttaja_id) VALUES (?,?)";
         PreparedStatement kysely = yhteys.prepareStatement(sql);
         kysely.setString(1, otsikko);
-       
+        kysely.setInt(2, kayttajaId);
 
         boolean palautus = kysely.execute();
 
@@ -71,15 +79,19 @@ public class Kategoria {
         return palautus;
 
     }
-     
-    public static Kategoria findOne(int id ) throws SQLException, NamingException{
+
+    public static Kategoria findOne(int id) throws SQLException, NamingException {
         Connection yhteys = Tietokanta.getYhteys();
-        String sql = "SELECT id, otsikko FROM Kategoria WHERE id ="+id+";";
+        String sql = "SELECT id, otsikko, kayttaja_id FROM Kategoria WHERE id =" + id + ";";
         PreparedStatement kysely = yhteys.prepareStatement(sql);
         ResultSet rs = kysely.executeQuery();
         Kategoria k = null;
-        if (rs.next()){
-            k = new Kategoria(rs.getString("otsikko"), rs.getInt("id"));
+        if (rs.next()) {
+            k = new Kategoria(rs.getString("otsikko"), rs.getInt("id"), rs.getInt("kayttaja_id"));
+        }
+        try {
+            rs.close();
+        } catch (Exception e) {
         }
         try {
             kysely.close();
@@ -91,11 +103,11 @@ public class Kategoria {
         }
         return k;
     }
-     
-    public static ArrayList<Kategoria> findAll() throws NamingException, SQLException{
-    
-         Connection yhteys = Tietokanta.getYhteys();
-        String sql = "SELECT id, otsikko FROM Kategoria";
+
+    public static ArrayList<Kategoria> findAll() throws NamingException, SQLException {
+
+        Connection yhteys = Tietokanta.getYhteys();
+        String sql = "SELECT id, otsikko, kayttaja_id FROM Kategoria";
         PreparedStatement kysely = yhteys.prepareStatement(sql);
         ResultSet rs = kysely.executeQuery();
         ArrayList<Kategoria> kategoriat = new ArrayList<Kategoria>();
@@ -104,6 +116,7 @@ public class Kategoria {
             Kategoria k = new Kategoria();
             k.setOtsikko(rs.getString("otsikko"));
             k.setId(rs.getInt("id"));
+            k.setKayttajaId(rs.getInt("kayttaja_id"));
             kategoriat.add(k);
 
         }
@@ -120,24 +133,26 @@ public class Kategoria {
         } catch (Exception e) {
         }
         return kategoriat;
-        
+
     }
-    
-    public static ArrayList<Tehtava> getKategoriaTehtavat(int kategoriaId) throws NamingException, SQLException{
-          Connection yhteys = Tietokanta.getYhteys();
-        String sql = "SELECT Tehtava.id FROM Tehtava, Tehtavakategoria, Kategoria "
-                + "WHERE Tehtava.id = Tehtavakategoria.tehtava_id "
-                + "AND Tehtavakategoria.kategoria_id = Kategoria.id "
-                + "AND Kategoria.id = "+kategoriaId+";";
-        
+
+    public static ArrayList<Kategoria> etsiKayttajanKategoriat(int kayttajaId) throws NamingException, SQLException {
+
+        Connection yhteys = Tietokanta.getYhteys();
+        String sql = "SELECT id, otsikko, kayttaja_id FROM Kategoria WHERE kayttaja_id = " + kayttajaId + ";";
         PreparedStatement kysely = yhteys.prepareStatement(sql);
         ResultSet rs = kysely.executeQuery();
-        ArrayList<Tehtava> tehtavat = new ArrayList<Tehtava>();
-        
-        while(rs.next()){
-            tehtavat.add(Tehtava.find(rs.getInt("id")));
+        ArrayList<Kategoria> kategoriat = new ArrayList<Kategoria>();
+        while (rs.next()) {
+            //Haetaan tietoa riviltä
+            Kategoria k = new Kategoria();
+            k.setOtsikko(rs.getString("otsikko"));
+            k.setId(rs.getInt("id"));
+            k.setKayttajaId(rs.getInt("kayttaja_id"));
+            kategoriat.add(k);
+
         }
-             try {
+        try {
             rs.close();
         } catch (Exception e) {
         }
@@ -149,9 +164,39 @@ public class Kategoria {
             yhteys.close();
         } catch (Exception e) {
         }
-        
+        return kategoriat;
+
+    }
+
+    public static ArrayList<Tehtava> getKategoriaTehtavat(int kategoriaId) throws NamingException, SQLException {
+        Connection yhteys = Tietokanta.getYhteys();
+        String sql = "SELECT Tehtava.id FROM Tehtava, Tehtavakategoria, Kategoria "
+                + "WHERE Tehtava.id = Tehtavakategoria.tehtava_id "
+                + "AND Tehtavakategoria.kategoria_id = Kategoria.id "
+                + "AND Kategoria.id = " + kategoriaId + ";";
+
+        PreparedStatement kysely = yhteys.prepareStatement(sql);
+        ResultSet rs = kysely.executeQuery();
+        ArrayList<Tehtava> tehtavat = new ArrayList<Tehtava>();
+
+        while (rs.next()) {
+            tehtavat.add(Tehtava.find(rs.getInt("id")));
+        }
+        try {
+            rs.close();
+        } catch (Exception e) {
+        }
+        try {
+            kysely.close();
+        } catch (Exception e) {
+        }
+        try {
+            yhteys.close();
+        } catch (Exception e) {
+        }
+
         return tehtavat;
-        
+
     }
 
     @Override
@@ -178,7 +223,5 @@ public class Kategoria {
         }
         return true;
     }
-    
-   
-    
+
 }

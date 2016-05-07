@@ -4,7 +4,7 @@
         type="javax.sql.DataSource" removeAbandoned="true"
         removeAbandonedTimeout="30" maxActive="100"
         maxIdle="30" maxWait="10000" username="niil"
-        password="c48645762f34f884"
+        password="1c8039c85753d1c8"
         driverClassName="org.postgresql.Driver"
         url="jdbc:postgresql://localhost/niil" />
 </Context>

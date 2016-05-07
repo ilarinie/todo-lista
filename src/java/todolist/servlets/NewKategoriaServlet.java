@@ -55,7 +55,7 @@ public class NewKategoriaServlet extends HttpServlet {
                 naytaJSP("newkategoria.jsp", request, response);
             }
 
-            if (!Kategoria.save(otsikko)) {
+            if (!Kategoria.save(otsikko, kirjautunut.getId() ) ) {
                 response.sendRedirect("index");
             } else {
                 response.sendRedirect("newkategoria");

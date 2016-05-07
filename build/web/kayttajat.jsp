@@ -11,7 +11,11 @@
      <h2>Käyttäjien lista</h2>
      <ul>
     <c:forEach items="${lista}" var="kayttaja">
-        <li><a href="kayttaja?id=${kayttaja.id}">${kayttaja.nimi}</a></li>
+        <li>${kayttaja.nimi}
+            <c:if test="${kirjautunut.admin}">
+                <a href="destroykayttaja?id=${kayttaja.id}" class="btn btn-danger">Poista</a>
+            </c:if>
+        </li>
     </c:forEach>
      </ul>
     

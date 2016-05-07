@@ -17,7 +17,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import todolist.mallit.Kayttaja;
-import todolist.mallit.Tehtava;
 import static todolist.mallit.naytaJSP.asetaVirhe;
 import static todolist.mallit.naytaJSP.naytaJSP;
 
@@ -25,7 +24,7 @@ import static todolist.mallit.naytaJSP.naytaJSP;
  *
  * @author ile
  */
-public class LisaaKategoriaServlet extends HttpServlet {
+public class DestroyKayttajaServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -39,26 +38,22 @@ public class LisaaKategoriaServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, NamingException, SQLException {
         response.setContentType("text/html;charset=UTF-8");
-        int tid = Integer.parseInt(request.getParameter("tid"));
-        int kid = Integer.parseInt(request.getParameter("kid"));
         
-        
-         HttpSession session = request.getSession();
+        int id = Integer.parseInt(request.getParameter("id"));
+        HttpSession session = request.getSession();
         Kayttaja kirjautunut = (Kayttaja) session.getAttribute("kirjautunut");
         
         if (kirjautunut!=null){
-            
-            if (!Tehtava.addKategoria(tid, kid,kirjautunut.getId())){
+            if (!Kayttaja.destroy(id, kirjautunut.getId())){
+                System.out.println("blaa");
                 response.sendRedirect(request.getHeader("referer"));
+            }else {
+                asetaVirhe("Et voi poistaa käyttäjää", request);
+                naytaJSP("error.jsp",request,response);
             }
-            else {
-                asetaVirhe("virhe kategorian lisäämisessä", request);
-                naytaJSP("error.jsp", request, response);
-            }
-            
-            
+
         }else {
-            asetaVirhe("Kirjaudu ensin sisään", request);
+            asetaVirhe("kirjaudu sisään poistaaksesi todon", request);
             naytaJSP("login.jsp", request, response);
         }
     }
@@ -78,9 +73,9 @@ public class LisaaKategoriaServlet extends HttpServlet {
         try {
             processRequest(request, response);
         } catch (NamingException ex) {
-            Logger.getLogger(LisaaKategoriaServlet.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DestroyKayttajaServlet.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
-            Logger.getLogger(LisaaKategoriaServlet.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DestroyKayttajaServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -98,9 +93,9 @@ public class LisaaKategoriaServlet extends HttpServlet {
         try {
             processRequest(request, response);
         } catch (NamingException ex) {
-            Logger.getLogger(LisaaKategoriaServlet.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DestroyKayttajaServlet.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
-            Logger.getLogger(LisaaKategoriaServlet.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DestroyKayttajaServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

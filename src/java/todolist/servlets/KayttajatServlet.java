@@ -19,7 +19,10 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import todolist.mallit.Kayttaja;
+import static todolist.mallit.naytaJSP.asetaVirhe;
+import static todolist.mallit.naytaJSP.naytaJSP;
 
 /**
  *
@@ -39,16 +42,23 @@ public class KayttajatServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, NamingException, SQLException {
         response.setContentType("text/html;charset=UTF-8");
-
+         HttpSession session = request.getSession();
+        Kayttaja kirjautunut = (Kayttaja) session.getAttribute("kirjautunut");
+        if (kirjautunut != null) {
         ArrayList<Kayttaja> lista = Kayttaja.getKayttajat();
         
         System.out.println(lista.size());
 
         request.setAttribute("lista", lista);
+        request.setAttribute("kirjautunut", kirjautunut);
 
         RequestDispatcher dispatcher = request.getRequestDispatcher("kayttajat.jsp");
 
         dispatcher.forward(request, response);
+        }else{
+            asetaVirhe("Kirjaudu ensin sisään", request);
+            naytaJSP("login.jsp", request, response);
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

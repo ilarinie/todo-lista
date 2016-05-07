@@ -45,7 +45,7 @@ public class DestroyTehtava extends HttpServlet {
         Kayttaja kirjautunut = (Kayttaja) session.getAttribute("kirjautunut");
         
         if (kirjautunut!=null){
-        if (!Tehtava.destroy(id)) {
+        if (!Tehtava.destroy(id, kirjautunut.getId())) {
             response.sendRedirect("index");
         } else {
             asetaVirhe("poisto epäonnistui", request);

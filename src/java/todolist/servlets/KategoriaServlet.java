@@ -43,33 +43,35 @@ public class KategoriaServlet extends HttpServlet {
             throws ServletException, IOException, SQLException, NamingException {
         response.setContentType("text/html;charset=UTF-8");
         String param = request.getParameter("id");
-        
-        if (param == null || param.isEmpty()){
-            ArrayList<Kategoria> kategoriat = Kategoria.findAll();
-            request.setAttribute("kategoriat", kategoriat);
-            
-            naytaJSP("kategoriat.jsp", request, response);
-            return;
-        }
-        int id = Integer.parseInt(param);
-        System.out.println(id);
-         HttpSession session = request.getSession();
+        HttpSession session = request.getSession();
         Kayttaja kirjautunut = (Kayttaja) session.getAttribute("kirjautunut");
-        
-        if (kirjautunut!=null){
-        
-         
-            
-        Kategoria k = Kategoria.findOne(id);
-        ArrayList<Tehtava> lista = Kategoria.getKategoriaTehtavat(id);
-                
-        request.setAttribute("kategoria", k);
-        request.setAttribute("tehtavalista", lista);
+        if (kirjautunut != null) {
 
-        RequestDispatcher dispatcher = request.getRequestDispatcher("kategoria.jsp");
+            if (param == null || param.isEmpty()) {
+                ArrayList<Kategoria> kategoriat = Kategoria.etsiKayttajanKategoriat(kirjautunut.getId());
+                request.setAttribute("kategoriat", kategoriat);
 
-        dispatcher.forward(request, response);
-        }else {
+                naytaJSP("kategoriat.jsp", request, response);
+                return;
+            }
+            int id = Integer.parseInt(param);
+            System.out.println(id);
+
+            Kategoria k = Kategoria.findOne(id);
+            if (k.getKayttajaId() != kirjautunut.getId()){
+                asetaVirhe("Yritit katsella muiden kategorioita", request);
+                naytaJSP("error.jsp",request,response);
+                return;
+            }
+            ArrayList<Tehtava> lista = Kategoria.getKategoriaTehtavat(id);
+
+            request.setAttribute("kategoria", k);
+            request.setAttribute("tehtavalista", lista);
+
+            RequestDispatcher dispatcher = request.getRequestDispatcher("kategoria.jsp");
+
+            dispatcher.forward(request, response);
+        } else {
             asetaVirhe("Kirjaudu ensin sisään", request);
             naytaJSP("login.jsp", request, response);
         }
