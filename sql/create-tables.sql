@@ -10,13 +10,13 @@ otsikko varchar(255) NOT NULL,
 kuvaus varchar(255),
 prioriteetti integer,
 suoritettu boolean,
-yksityinen boolean,
 kayttaja_id integer REFERENCES Kayttaja(id)
 );
 
 CREATE TABLE Kategoria(
 id SERIAL PRIMARY KEY,
 otsikko varchar(255)
+kayttaja_id integer REFERENCES Kayttaja(id)
 );
 
 CREATE TABLE Tehtavakategoria(
