@@ -1,7 +1,8 @@
 CREATE TABLE Kayttaja(
 id SERIAL PRIMARY KEY,
 nimi varchar(50) NOT NULL,
-salasana varchar(50) NOT NULL
+salasana varchar(50) NOT NULL,
+admin boolean
 );
 
 CREATE TABLE Tehtava(
