@@ -15,7 +15,7 @@ kayttaja_id integer REFERENCES Kayttaja(id)
 
 CREATE TABLE Kategoria(
 id SERIAL PRIMARY KEY,
-otsikko varchar(255)
+otsikko varchar(255),
 kayttaja_id integer REFERENCES Kayttaja(id)
 );
 
