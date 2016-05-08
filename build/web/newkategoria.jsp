@@ -11,11 +11,17 @@
     <div class="row">
 
         <div class="col-md-5 col-centered">
+
             <h1>UUSI KATEGORIA</h1>
-            <form action="newkategoria" method="post">
+            <ul>
+                <c:forEach items="${virheet}" var="virhe">
+                    <c:out value="virhe"></c:out>
+                </c:forEach>
+            </ul>
+            <form action="tallennakategoria" method="post">
                 Kategorian nimi</br><input type="text" name="otsikko"></br><br>
-            <button type="submit" class="btn btn-primary">LUO</button>
-            
+                <button type="submit" class="btn btn-primary">LUO</button>
+
             </form>
         </div>
     </div>

@@ -193,7 +193,7 @@ public class Kayttaja {
         }
 
         Connection yhteys = Tietokanta.getYhteys();
-        String sql = "INSERT INTO Kayttaja (nimi, salasana) VALUES (?,?,?)";
+        String sql = "INSERT INTO Kayttaja (nimi, salasana, admin) VALUES (?,?,?)";
         PreparedStatement kysely = yhteys.prepareStatement(sql);
         kysely.setString(1, nimi);
         kysely.setString(2, salasana);

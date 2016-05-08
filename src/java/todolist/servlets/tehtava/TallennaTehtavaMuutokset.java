@@ -54,10 +54,16 @@ public class TallennaTehtavaMuutokset extends HttpServlet {
            muokkaus.setOtsikko(request.getParameter("otsikko"));
            muokkaus.setPrioriteetti(Integer.parseInt(request.getParameter("prioriteetti")));
            muokkaus.setKuvaus(request.getParameter("kuvaus"));
+           if (muokkaus.onKelvollinen()){
+               Tehtava.update(id, muokkaus);
+               response.sendRedirect("tehtava?id="+id);
+           }else {
+               request.setAttribute("tehtava", muokkaus);
+               request.setAttribute("virheet", muokkaus.getVirheet());
+               naytaJSP("edittehtava.jsp", request, response);
+           }
            
-           Tehtava.update(id, muokkaus);
            
-           response.sendRedirect("tehtava?id="+id);
         }else {
             asetaVirhe("Kirjaudu ensin sisään", request);
             naytaJSP("login.jsp", request, response);

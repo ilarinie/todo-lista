@@ -11,7 +11,7 @@
     <ul>
         <c:forEach items="${kategoriat}" var="kategoria">
 
-            <li><a href="kategoria?id=${kategoria.id}">${kategoria.otsikko}</a></li>
+            <li><a href="kategoria?id=${kategoria.id}">${kategoria.otsikko}</a> - <a href="muokkaakategoria?id=${kategoria.id}" class="btn btn-warning">Muokkaa</a></li>
             </c:forEach>
 
     </ul>

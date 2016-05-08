@@ -3,34 +3,27 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/home/ile/Projects/todo-lista/src/java/todolist/servlets/ShowKayttajaServlet.java</file>
-            <file>file:/home/ile/Projects/todo-lista/src/java/todolist/servlets/NewTehtavaServlet.java</file>
+            <file>file:/home/ile/Projects/todo-lista/src/conf/MANIFEST.MF</file>
+            <file>file:/home/ile/Projects/todo-lista/web/kayttajat.jsp</file>
+            <file>file:/home/ile/Projects/todo-lista/src/java/todolist/mallit/Kategoria.java</file>
+            <file>file:/home/ile/Projects/todo-lista/src/java/todolist/tietokanta/Tietokanta.java</file>
             <file>file:/home/ile/Projects/todo-lista/web/kategoriat.jsp</file>
             <file>file:/home/ile/Projects/todo-lista/web/kayttaja.jsp</file>
+            <file>file:/home/ile/Projects/todo-lista/web/WEB-INF/web.xml</file>
             <file>file:/home/ile/Projects/todo-lista/web/html-demo/kirjaudu.html</file>
             <file>file:/home/ile/Projects/todo-lista/src/java/todolist/servlets/LoginServlet.java</file>
+            <file>file:/home/ile/Projects/todo-lista/web/html-demo/uusitehtava.html</file>
+            <file>file:/home/ile/Projects/todo-lista/web/tehtava.jsp</file>
             <file>file:/home/ile/Projects/todo-lista/src/java/todolist/mallit/naytaJSP.java</file>
-            <file>file:/home/ile/Projects/todo-lista/src/java/todolist/servlets/SuoritaTehtava.java</file>
+            <file>file:/home/ile/Projects/todo-lista/web/index.jsp</file>
+            <file>file:/home/ile/Projects/todo-lista/web/error.jsp</file>
             <file>file:/home/ile/Projects/todo-lista/web/login.jsp</file>
             <file>file:/home/ile/Projects/todo-lista/web/newtehtava.jsp</file>
-            <file>file:/home/ile/Projects/todo-lista/src/java/todolist/servlets/TehtavaServlet.java</file>
             <file>file:/home/ile/Projects/todo-lista/src/java/todolist/mallit/Kayttaja.java</file>
+            <file>file:/home/ile/Projects/todo-lista/web/newkategoria.jsp</file>
             <file>file:/home/ile/Projects/todo-lista/web/META-INF/context.xml</file>
             <file>file:/home/ile/Projects/todo-lista/src/java/todolist/mallit/Tehtava.java</file>
             <file>file:/home/ile/Projects/todo-lista/web/WEB-INF/tags/pohja.tag</file>
-            <file>file:/home/ile/Projects/todo-lista/src/java/todolist/servlets/NewKategoriaServlet.java</file>
-            <file>file:/home/ile/Projects/todo-lista/src/java/todolist/mallit/Kategoria.java</file>
-            <file>file:/home/ile/Projects/todo-lista/src/java/todolist/tietokanta/Tietokanta.java</file>
-            <file>file:/home/ile/Projects/todo-lista/web/WEB-INF/web.xml</file>
-            <file>file:/home/ile/Projects/todo-lista/src/java/todolist/servlets/DestroyTehtava.java</file>
-            <file>file:/home/ile/Projects/todo-lista/src/java/todolist/servlets/KategoriaServlet.java</file>
-            <file>file:/home/ile/Projects/todo-lista/web/html-demo/uusitehtava.html</file>
-            <file>file:/home/ile/Projects/todo-lista/web/tehtava.jsp</file>
-            <file>file:/home/ile/Projects/todo-lista/web/index.jsp</file>
-            <file>file:/home/ile/Projects/todo-lista/src/java/todolist/servlets/LisaaKategoriaServlet.java</file>
-            <file>file:/home/ile/Projects/todo-lista/web/newkategoria.jsp</file>
-            <file>file:/home/ile/Projects/todo-lista/src/java/todolist/servlets/ShowTehtavaServlet.java</file>
-            <file>file:/home/ile/Projects/todo-lista/src/java/todolist/servlets/KayttajatServlet.java</file>
             <file>file:/home/ile/Projects/todo-lista/web/kategoria.jsp</file>
         </group>
     </open-files>

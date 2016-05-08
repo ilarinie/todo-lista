@@ -11,10 +11,10 @@
     <p>${tehtava.kayttaja}</p>
     <div class="col-md-5">
         <h3>Kuvaus</h3>
-        <p>${tehtava.kuvaus}</p>
+        <p><c:out value="${tehtava.kuvaus}"></c:out></p>
         <h3>Kategoriat:</h3>
         <c:forEach items="${tehtava.kategoriat}" var="kategoria">
-            <a href="kategoria?id=${kategoria.id}"><span class="label label-default">${kategoria.otsikko}</span></a>
+            <a href="kategoria?id=${kategoria.id}"><span class="label label-default"><c:out value="${kategoria.otsikko}"></c:out></span></a>
             </c:forEach>
 
         <h3>Suorita:</h3>

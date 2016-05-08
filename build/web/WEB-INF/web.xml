@@ -13,12 +13,12 @@
         <servlet-class>todolist.servlets.tehtava.TehtavaServlet</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>NewTehtavaServlet</servlet-name>
-        <servlet-class>todolist.servlets.tehtava.NewTehtava</servlet-class>
+        <servlet-name>TallennaTehtava</servlet-name>
+        <servlet-class>todolist.servlets.tehtava.TallennaTehtava</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>NewKategoriaServlet</servlet-name>
-        <servlet-class>todolist.servlets.kategoria.NewKategoriaServlet</servlet-class>
+        <servlet-name>TallennaKategoria</servlet-name>
+        <servlet-class>todolist.servlets.kategoria.TallennaKategoria</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>LoginServlet</servlet-name>
@@ -80,6 +80,14 @@
         <servlet-name>TallennaKategoriaMuutokset</servlet-name>
         <servlet-class>todolist.servlets.kategoria.TallennaKategoriaMuutokset</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>NewTehtava</servlet-name>
+        <servlet-class>todolist.servlets.tehtava.NewTehtava</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>NewKategoria</servlet-name>
+        <servlet-class>todolist.servlets.kategoria.NewKategoria</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Listaus</servlet-name>
         <url-pattern>/Listaus</url-pattern>
@@ -93,12 +101,12 @@
         <url-pattern>/index</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>NewTehtavaServlet</servlet-name>
-        <url-pattern>/newtehtava</url-pattern>
+        <servlet-name>TallennaTehtava</servlet-name>
+        <url-pattern>/tallennatehtava</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>NewKategoriaServlet</servlet-name>
-        <url-pattern>/newkategoria</url-pattern>
+        <servlet-name>TallennaKategoria</servlet-name>
+        <url-pattern>/tallennakategoria</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>LoginServlet</servlet-name>
@@ -159,6 +167,14 @@
     <servlet-mapping>
         <servlet-name>TallennaKategoriaMuutokset</servlet-name>
         <url-pattern>/tallennakategoriamuutokset</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>NewTehtava</servlet-name>
+        <url-pattern>/newtehtava</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>NewKategoria</servlet-name>
+        <url-pattern>/newkategoria</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

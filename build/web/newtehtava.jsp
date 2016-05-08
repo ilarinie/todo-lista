@@ -11,12 +11,18 @@
     <div class="row">
 
         <div class="col-md-5 col-centered">
+           
             <h1>UUSI TEHTÄVÄ</h1>
-            <form action="newtehtava" method="post">
-            OTSIKKO</br><input type="text" name="otsikko"></br>
-            PRIORITEETTI</br><input type="number" name="prioriteetti"></br>
+             <ul>
+                <c:forEach items="${virheet}" var="virhe">
+                    <li style="color:red;">${virhe}</li>
+                </c:forEach>
+            </ul>
+            <form action="tallennatehtava" method="post">
+            OTSIKKO</br><input type="text" name="otsikko" value="${tehtava.otsikko}"></br>
+            PRIORITEETTI</br><input type="number" name="prioriteetti" value="${tehtava.prioriteetti}"></br>
             KUVAUS</br>
-            <textarea name="kuvaus"></textarea></br>
+            <textarea name="kuvaus">${tehtava.kuvaus}</textarea></br>
             <button type="submit" class="btn btn-primary">LUO</button>
             
             </form>

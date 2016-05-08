@@ -12,6 +12,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import javax.naming.NamingException;
 import todolist.tietokanta.Tietokanta;
 
@@ -28,6 +29,7 @@ public class Tehtava implements Comparable<Tehtava> {
     private boolean suoritettu;
     private Kayttaja kayttaja;
     private ArrayList<Kategoria> kategoriat;
+    private List<String> virheet = new ArrayList<String>();
 
     public Tehtava() {
     }
@@ -53,6 +55,9 @@ public class Tehtava implements Comparable<Tehtava> {
     }
 
     public void setOtsikko(String otsikko) {
+        if (otsikko == null || otsikko.isEmpty() || otsikko.equals("")){
+            virheet.add("Otsikko ei voi olla tyhjä");
+        }
         this.otsikko = otsikko;
     }
 
@@ -87,6 +92,13 @@ public class Tehtava implements Comparable<Tehtava> {
     public void setKategoriat(ArrayList<Kategoria> kategoriat) {
         this.kategoriat = kategoriat;
     }
+    
+    public boolean onKelvollinen(){
+        return this.virheet.isEmpty();
+    }
+    public List<String> getVirheet(){
+        return this.virheet;
+    }
 
     public static Tehtava find(int id) throws NamingException, SQLException {
         Connection yhteys = Tietokanta.getYhteys();
@@ -100,7 +112,7 @@ public class Tehtava implements Comparable<Tehtava> {
             t.setOtsikko(rs.getString("otsikko"));
             t.setKuvaus(rs.getString("kuvaus"));
             t.setPrioriteetti(rs.getInt("prioriteetti"));
-            t.setKayttaja(Kayttaja.getKayttaja(rs.getInt("id")));
+            t.setKayttaja(Kayttaja.getKayttaja(rs.getInt("kayttaja_id")));
             t.setSuoritettu(rs.getBoolean("suoritettu"));
             t.setKategoriat(addKategoriat(t.getId()));
 
@@ -195,15 +207,15 @@ public class Tehtava implements Comparable<Tehtava> {
 
     }
 
-    public static int save(String otsikko, String kuvaus, int prioriteetti, int kayttaja_id) throws NamingException, SQLException {
+    public static int save(Tehtava t, int kayttaja_id) throws NamingException, SQLException {
         Connection yhteys = Tietokanta.getYhteys();
 
         String sql = "INSERT INTO Tehtava (otsikko, kuvaus, prioriteetti,suoritettu, kayttaja_id) VALUES (?,?,?,?,?) RETURNING id";
 
         PreparedStatement kysely = yhteys.prepareStatement(sql);
-        kysely.setString(1, otsikko);
-        kysely.setString(2, kuvaus);
-        kysely.setInt(3, prioriteetti);
+        kysely.setString(1, t.getOtsikko());
+        kysely.setString(2, t.getKuvaus());
+        kysely.setInt(3, t.getPrioriteetti());
         kysely.setBoolean(4, false);
         kysely.setInt(5, kayttaja_id);
 

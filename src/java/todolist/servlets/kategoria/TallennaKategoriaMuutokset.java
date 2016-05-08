@@ -44,10 +44,18 @@ public class TallennaKategoriaMuutokset extends HttpServlet {
 
         if (kirjautunut != null) {
             int id = Integer.parseInt(request.getParameter("id"));
-
+            
+            Kategoria k = new Kategoria();
+            k.setOtsikko(request.getParameter("otsikko"));
+            
+            if (k.onKelvollinen()){
             Kategoria.update(id, kirjautunut.getId(), request.getParameter("otsikko"));
-
-            response.sendRedirect("kayttaja?id=" + id);
+            response.sendRedirect("kategoria");
+            } else {
+                request.setAttribute("virheet", k.getVirheet());
+                request.setAttribute("kategoria", k);
+                naytaJSP("editkategoria.jsp", request, response);
+            }
         } else {
             asetaVirhe("Kirjaudu ensin sisään", request);
             naytaJSP("login.jsp", request, response);

@@ -12,6 +12,11 @@
 
         <div class="col-md-5 col-centered">
             <h1>Muokkaa kategoriaa</h1>
+            <ul>
+                <c:forEach items="${virheet}" var="virhe">
+                    <c:out value="virhe"></c:out>
+                </c:forEach>
+            </ul>
             <form action="tallennakategoriamuutokset" method="post">
                 Kategorian nimi</br><input type="text" name="otsikko" value="${kategoria.otsikko}"></br><br>
                 <input type="hidden" name="id" value="${kategoria.id}">

@@ -23,10 +23,10 @@
         <tbody>
             <c:forEach items="${tehtavalista}" var="tehtava">
                 <tr>
-                    <td><a href="tehtava?id=${tehtava.id}">${tehtava.otsikko}</a></td>
+                    <td><a href="tehtava?id=${tehtava.id}"><c:out value="${tehtava.otsikko}"></c:out></a></td>
                     <td>${tehtava.prioriteetti}</td>
                     <td><c:forEach items="${tehtava.kategoriat}" var="kategoria">
-                            <a href="kategoria?id=${kategoria.id}"><span class="label label-default">${kategoria.otsikko}</span></a>
+                            <a href="kategoria?id=${kategoria.id}"><span class="label label-default"><c:out value="${kategoria.otsikko}"></c:out></span></a>
                         </c:forEach></td>
                     <c:choose>
                         <c:when test="${tehtava.suoritettu}">

@@ -12,6 +12,11 @@
 
         <div class="col-md-5 col-centered">
             <h1>MUOKKAA TEHTÄVÄÄ</h1>
+             <ul>
+                <c:forEach items="${virheet}" var="virhe">
+                    <li style="color:red;">${virhe}</li>
+                </c:forEach>
+            </ul>
             <form action="tallennatehtavamuutokset" method="post">
             OTSIKKO</br><input type="text" name="otsikko" value="${tehtava.otsikko}"></br>
             PRIORITEETTI</br><input type="number" name="prioriteetti" value="${tehtava.prioriteetti}"></br>

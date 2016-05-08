@@ -11,6 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import javax.naming.NamingException;
 import static todolist.mallit.Tehtava.addKategoriat;
 import todolist.tietokanta.Tietokanta;
@@ -24,6 +25,7 @@ public class Kategoria {
     private String otsikko;
     private int kayttajaId;
     private int id;
+    private List<String> virheet = new ArrayList<String>();
 
     public Kategoria() {
     }
@@ -55,14 +57,25 @@ public class Kategoria {
     }
 
     public void setOtsikko(String otsikko) {
+        if (otsikko.isEmpty()){
+            virheet.add("Otsikko ei voi olla tyhjä");
+        }
         this.otsikko = otsikko;
     }
+    
+    public boolean onKelvollinen(){
+        return this.virheet.isEmpty();
+    }
+    
+    public List<String> getVirheet(){
+        return this.virheet;
+    }
 
-    public static boolean save(String otsikko, int kayttajaId) throws NamingException, SQLException {
+    public static boolean save(Kategoria k, int kayttajaId) throws NamingException, SQLException {
         Connection yhteys = Tietokanta.getYhteys();
         String sql = "INSERT INTO Kategoria (otsikko, kayttaja_id) VALUES (?,?)";
         PreparedStatement kysely = yhteys.prepareStatement(sql);
-        kysely.setString(1, otsikko);
+        kysely.setString(1, k.getOtsikko());
         kysely.setInt(2, kayttajaId);
 
         boolean palautus = kysely.execute();

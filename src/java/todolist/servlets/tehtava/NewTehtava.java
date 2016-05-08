@@ -7,17 +7,12 @@ package todolist.servlets.tehtava;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.naming.NamingException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import todolist.mallit.Kayttaja;
-import todolist.mallit.Tehtava;
 import static todolist.mallit.naytaJSP.asetaVirhe;
 import static todolist.mallit.naytaJSP.naytaJSP;
 
@@ -37,37 +32,15 @@ public class NewTehtava extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException, NamingException, SQLException {
-        String otsikko = request.getParameter("otsikko");
-        String kuvaus = request.getParameter("kuvaus");
-        String prioriteetti = request.getParameter("prioriteetti");
-        HttpSession session = request.getSession();
+            throws ServletException, IOException {
+        response.setContentType("text/html;charset=UTF-8");
+         HttpSession session = request.getSession();
         Kayttaja kirjautunut = (Kayttaja) session.getAttribute("kirjautunut");
 
         if (kirjautunut != null) {
-
-            if (otsikko == null || kuvaus == null || prioriteetti == null) {
-                naytaJSP("newtehtava.jsp", request, response);
-                return;
-            }
-
-            if (otsikko.equals("")) {
-                asetaVirhe("Anna otsikko", request);
-                naytaJSP("newtehtava", request, response);
-            }
-            if (kuvaus.equals("")){
-                asetaVirhe("Anna kuvaus", request);
-                naytaJSP("newtehtava", request, response);
-            }
             
-            int tid = Tehtava.save(otsikko, kuvaus, Integer.parseInt(prioriteetti),kirjautunut.getId());
-            System.out.println(tid);
-            if (tid != 0) {
-                response.sendRedirect("tehtava?id="+tid);
-            } else {
-                response.sendRedirect("newtehtava");
-            }
-        } else {
+            naytaJSP("newtehtava.jsp", request, response);
+        }else {
             asetaVirhe("Kirjaudu ensin sisään", request);
             naytaJSP("login.jsp", request, response);
         }
@@ -85,13 +58,7 @@ public class NewTehtava extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        try {
-            processRequest(request, response);
-        } catch (NamingException ex) {
-            Logger.getLogger(NewTehtava.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
-            Logger.getLogger(NewTehtava.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        processRequest(request, response);
     }
 
     /**
@@ -105,13 +72,7 @@ public class NewTehtava extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        try {
-            processRequest(request, response);
-        } catch (NamingException ex) {
-            Logger.getLogger(NewTehtava.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
-            Logger.getLogger(NewTehtava.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        processRequest(request, response);
     }
 
     /**

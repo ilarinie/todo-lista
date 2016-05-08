@@ -18,6 +18,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import todolist.mallit.Kategoria;
 import todolist.mallit.Kayttaja;
+import todolist.mallit.Tehtava;
+import todolist.servlets.tehtava.TallennaTehtava;
 import static todolist.mallit.naytaJSP.asetaVirhe;
 import static todolist.mallit.naytaJSP.naytaJSP;
 
@@ -25,7 +27,7 @@ import static todolist.mallit.naytaJSP.naytaJSP;
  *
  * @author ile
  */
-public class MuokkaaKategoria extends HttpServlet {
+public class TallennaKategoria extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -37,38 +39,24 @@ public class MuokkaaKategoria extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException, SQLException, NamingException {
-        response.setContentType("text/html;charset=UTF-8");
-         HttpSession session = request.getSession();
+            throws ServletException, IOException, NamingException, SQLException {
+        HttpSession session = request.getSession();
         Kayttaja kirjautunut = (Kayttaja) session.getAttribute("kirjautunut");
 
         if (kirjautunut != null) {
-            int id = 0;
-            //Parsetaan id parametreistä
-            try {
-                id = Integer.parseInt(request.getParameter("id"));
-            } catch (Exception e) {
-                asetaVirhe("Yrititkö kirjoittaa osoitetta käsin?", request);
-                naytaJSP("error.jsp", request, response);
-                return;
-            }
-            //Haetaan tehtävä
-            Kategoria k = Kategoria.findOne(id);
-            //Tarkistetaan että kyseessä on kirjautuneen käyttäjän oma tehtävä
-            if (k.getKayttajaId() == kirjautunut.getId()){
-                request.setAttribute("kategoria", k);
-                naytaJSP("editkategoria.jsp", request, response);
-                
+
+            Kategoria uusi = new Kategoria();
+            uusi.setOtsikko(request.getParameter("otsikko"));
+            if (uusi.onKelvollinen()) {
+            Kategoria.save(uusi, kirjautunut.getId());
+            response.sendRedirect("kategoria");
             }else {
-                asetaVirhe("Yritit muokata kategoriaa ilman oikeuksia", request);
-                naytaJSP("error.jsp", request, response);
-                return;
+                request.setAttribute("virheet", uusi.getVirheet());
+                naytaJSP("newkategoria.jsp", request, response);
             }
-            
-            
-            
+           
         } else {
-            asetaVirhe("Sinun tulisi olla kirjautunut sisään.", request);
+            asetaVirhe("Kirjaudu ensin sisään", request);
             naytaJSP("login.jsp", request, response);
         }
     }
@@ -87,10 +75,10 @@ public class MuokkaaKategoria extends HttpServlet {
             throws ServletException, IOException {
         try {
             processRequest(request, response);
-        } catch (SQLException ex) {
-            Logger.getLogger(MuokkaaKategoria.class.getName()).log(Level.SEVERE, null, ex);
         } catch (NamingException ex) {
-            Logger.getLogger(MuokkaaKategoria.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(TallennaTehtava.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(TallennaTehtava.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -107,10 +95,10 @@ public class MuokkaaKategoria extends HttpServlet {
             throws ServletException, IOException {
         try {
             processRequest(request, response);
-        } catch (SQLException ex) {
-            Logger.getLogger(MuokkaaKategoria.class.getName()).log(Level.SEVERE, null, ex);
         } catch (NamingException ex) {
-            Logger.getLogger(MuokkaaKategoria.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(TallennaTehtava.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(TallennaTehtava.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
