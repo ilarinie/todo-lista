@@ -6,11 +6,11 @@
     </servlet>
     <servlet>
         <servlet-name>KayttajaServlet</servlet-name>
-        <servlet-class>todolist.servlets.kayttaja.KayttajatServlet</servlet-class>
+        <servlet-class>todolist.servlets.kayttaja.Kayttajat</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>TehtavaServlet</servlet-name>
-        <servlet-class>todolist.servlets.tehtava.TehtavaServlet</servlet-class>
+        <servlet-class>todolist.servlets.tehtava.Tehtavat</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>TallennaTehtava</servlet-name>
@@ -38,23 +38,23 @@
     </servlet>
     <servlet>
         <servlet-name>ShowKayttajaServlet</servlet-name>
-        <servlet-class>todolist.servlets.kayttaja.ShowKayttajaServlet</servlet-class>
+        <servlet-class>todolist.servlets.kayttaja.ShowKayttaja</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>NewKayttajaServlet</servlet-name>
-        <servlet-class>todolist.servlets.kayttaja.NewKayttajaServlet</servlet-class>
+        <servlet-class>todolist.servlets.kayttaja.NewKayttaja</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>KategoriaServlet</servlet-name>
-        <servlet-class>todolist.servlets.kategoria.KategoriaServlet</servlet-class>
+        <servlet-class>todolist.servlets.kategoria.Kategoriat</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>LisaaKategoriaServlet</servlet-name>
-        <servlet-class>todolist.servlets.kategoria.LisaaKategoriaServlet</servlet-class>
+        <servlet-class>todolist.servlets.kategoria.LisaaKategoria</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>DestroyKayttajaServlet</servlet-name>
-        <servlet-class>todolist.servlets.kayttaja.DestroyKayttajaServlet</servlet-class>
+        <servlet-class>todolist.servlets.kayttaja.DestroyKayttaja</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>MuokkaaTehtavaServlet</servlet-name>

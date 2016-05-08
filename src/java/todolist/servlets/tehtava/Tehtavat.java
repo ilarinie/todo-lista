@@ -3,14 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package todolist.servlets.kayttaja;
+package todolist.servlets.tehtava;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.naming.NamingException;
@@ -21,14 +19,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import todolist.mallit.Kayttaja;
+import todolist.mallit.Tehtava;
 import static todolist.mallit.naytaJSP.asetaVirhe;
 import static todolist.mallit.naytaJSP.naytaJSP;
 
 /**
+ * Servlet tehtävien listaukseen
  *
  * @author ile
  */
-public class KayttajatServlet extends HttpServlet {
+public class Tehtavat extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -40,25 +40,30 @@ public class KayttajatServlet extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException, NamingException, SQLException {
+            throws ServletException, IOException, SQLException, NamingException {
         response.setContentType("text/html;charset=UTF-8");
-         HttpSession session = request.getSession();
+
+        //Haetaan kirjautunut käyttäjä
+        HttpSession session = request.getSession();
         Kayttaja kirjautunut = (Kayttaja) session.getAttribute("kirjautunut");
+
+        //jos käyttäjä löydetään
         if (kirjautunut != null) {
-        ArrayList<Kayttaja> lista = Kayttaja.getKayttajat();
-        
-        System.out.println(lista.size());
+            
+            
+            //Haetaan käyttäjän tehtävät ja lähetetään ne näkymälle
+            ArrayList<Tehtava> lista = Tehtava.etsiKayttajanTehtavat(kirjautunut.getId());
 
-        request.setAttribute("lista", lista);
-        request.setAttribute("kirjautunut", kirjautunut);
+            request.setAttribute("tehtavalista", lista);
 
-        RequestDispatcher dispatcher = request.getRequestDispatcher("kayttajat.jsp");
+            RequestDispatcher dispatcher = request.getRequestDispatcher("index.jsp");
 
-        dispatcher.forward(request, response);
-        }else{
+            dispatcher.forward(request, response);
+        } else { //Jos kirjautunutta käyttäjää ei ole, pyydetään kirjautumaan.
             asetaVirhe("Kirjaudu ensin sisään", request);
             naytaJSP("login.jsp", request, response);
         }
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -75,10 +80,10 @@ public class KayttajatServlet extends HttpServlet {
             throws ServletException, IOException {
         try {
             processRequest(request, response);
-        } catch (NamingException ex) {
-            Logger.getLogger(KayttajatServlet.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
-            Logger.getLogger(KayttajatServlet.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Tehtavat.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NamingException ex) {
+            Logger.getLogger(Tehtavat.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -95,10 +100,10 @@ public class KayttajatServlet extends HttpServlet {
             throws ServletException, IOException {
         try {
             processRequest(request, response);
-        } catch (NamingException ex) {
-            Logger.getLogger(KayttajatServlet.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
-            Logger.getLogger(KayttajatServlet.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Tehtavat.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NamingException ex) {
+            Logger.getLogger(Tehtavat.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

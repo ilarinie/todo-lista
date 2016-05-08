@@ -22,6 +22,7 @@ import static todolist.mallit.naytaJSP.asetaVirhe;
 import static todolist.mallit.naytaJSP.naytaJSP;
 
 /**
+ * Tehtävän tallennusservlet
  *
  * @author ile
  */
@@ -39,10 +40,13 @@ public class TallennaTehtava extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, NamingException, SQLException {
       
+        //Tarkistetaan onko kirjautumista
         HttpSession session = request.getSession();
         Kayttaja kirjautunut = (Kayttaja) session.getAttribute("kirjautunut");
 
         if (kirjautunut != null) {
+            
+            //haetaan parametreistä tallennettavaan tehtävään tiedot
             int prio = 1;
             Tehtava t = new Tehtava();
             t.setOtsikko(request.getParameter("otsikko"));
@@ -54,6 +58,8 @@ public class TallennaTehtava extends HttpServlet {
             }
             t.setPrioriteetti(prio);
 
+            //Jos tehtävä on kelvollinen, tallennetaan ja ohjataan tehtävän sivulle, jos ei
+            //ohjataan takaisin luontisivulle ja näytetään virheet
             if (t.onKelvollinen()) {
                 int tid = Tehtava.save(t, kirjautunut.getId());
                 response.sendRedirect("tehtava?id=" + tid);
@@ -64,6 +70,7 @@ public class TallennaTehtava extends HttpServlet {
                 naytaJSP("newtehtava.jsp", request, response);
             }
         } else {
+            //Jos kirjautumista ei ole, pyydetään kirjatumaan sisään
             asetaVirhe("Kirjaudu ensin sisään", request);
             naytaJSP("login.jsp", request, response);
         }

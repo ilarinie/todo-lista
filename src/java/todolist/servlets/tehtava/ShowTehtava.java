@@ -24,6 +24,7 @@ import static todolist.mallit.naytaJSP.asetaVirhe;
 import static todolist.mallit.naytaJSP.naytaJSP;
 
 /**
+ * Servlet tehtävän esittelyyn
  *
  * @author ile
  */
@@ -43,23 +44,25 @@ public class ShowTehtava extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         String idParam = request.getParameter("id");
         int id;
+        
+        //haetaan kirjautunut käyttäjä
         HttpSession session = request.getSession();
         Kayttaja kirjautunut = (Kayttaja) session.getAttribute("kirjautunut");
 
         if (kirjautunut != null) {
-
+            
             try {
                 id = Integer.parseInt(idParam);
             } catch (Exception e) {
                 id = 0;
             }
+            //etsitään tehtävä parametrinä saadulla id:llä
             Tehtava tehtava = Tehtava.find(id);
             if (tehtava != null) {
+                //haetaan käyttäjän kategoriat lisäystä varten
                 ArrayList<Kategoria> lisattavat = Kategoria.etsiKayttajanKategoriat(kirjautunut.getId());
-                System.out.println(lisattavat.size());
+                //poistetaan niistä tehtävässä jo olevat kategoriat
                 lisattavat.removeAll(tehtava.getKategoriat());
-                System.out.println(tehtava.getKategoriat().size());
-                System.out.println(lisattavat.size());
                 request.setAttribute("lisattavat", lisattavat);
                 request.setAttribute("tehtava", tehtava);
                 naytaJSP("tehtava.jsp", request, response);

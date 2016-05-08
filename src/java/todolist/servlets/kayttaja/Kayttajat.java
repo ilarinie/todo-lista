@@ -3,21 +3,24 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package todolist.servlets.kategoria;
+package todolist.servlets.kayttaja;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.naming.NamingException;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import todolist.mallit.Kayttaja;
-import todolist.mallit.Tehtava;
 import static todolist.mallit.naytaJSP.asetaVirhe;
 import static todolist.mallit.naytaJSP.naytaJSP;
 
@@ -25,7 +28,7 @@ import static todolist.mallit.naytaJSP.naytaJSP;
  *
  * @author ile
  */
-public class LisaaKategoriaServlet extends HttpServlet {
+public class Kayttajat extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -39,25 +42,20 @@ public class LisaaKategoriaServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, NamingException, SQLException {
         response.setContentType("text/html;charset=UTF-8");
-        int tid = Integer.parseInt(request.getParameter("tid"));
-        int kid = Integer.parseInt(request.getParameter("kid"));
-        
-        
          HttpSession session = request.getSession();
         Kayttaja kirjautunut = (Kayttaja) session.getAttribute("kirjautunut");
+        if (kirjautunut != null) {
+        ArrayList<Kayttaja> lista = Kayttaja.getKayttajat();
         
-        if (kirjautunut!=null){
-            
-            if (!Tehtava.addKategoria(tid, kid,kirjautunut.getId())){
-                response.sendRedirect(request.getHeader("referer"));
-            }
-            else {
-                asetaVirhe("virhe kategorian lisäämisessä", request);
-                naytaJSP("error.jsp", request, response);
-            }
-            
-            
-        }else {
+        System.out.println(lista.size());
+
+        request.setAttribute("lista", lista);
+        request.setAttribute("kirjautunut", kirjautunut);
+
+        RequestDispatcher dispatcher = request.getRequestDispatcher("kayttajat.jsp");
+
+        dispatcher.forward(request, response);
+        }else{
             asetaVirhe("Kirjaudu ensin sisään", request);
             naytaJSP("login.jsp", request, response);
         }
@@ -78,9 +76,9 @@ public class LisaaKategoriaServlet extends HttpServlet {
         try {
             processRequest(request, response);
         } catch (NamingException ex) {
-            Logger.getLogger(LisaaKategoriaServlet.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Kayttajat.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
-            Logger.getLogger(LisaaKategoriaServlet.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Kayttajat.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -98,9 +96,9 @@ public class LisaaKategoriaServlet extends HttpServlet {
         try {
             processRequest(request, response);
         } catch (NamingException ex) {
-            Logger.getLogger(LisaaKategoriaServlet.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Kayttajat.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
-            Logger.getLogger(LisaaKategoriaServlet.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Kayttajat.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

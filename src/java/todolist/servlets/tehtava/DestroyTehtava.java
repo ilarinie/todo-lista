@@ -45,6 +45,7 @@ public class DestroyTehtava extends HttpServlet {
         Kayttaja kirjautunut = (Kayttaja) session.getAttribute("kirjautunut");
         
         if (kirjautunut!=null){
+            //tehtävä tuhotaan vain jos se on kirjautuneen käyttäjän oma tehtävä
         if (!Tehtava.destroy(id, kirjautunut.getId())) {
             response.sendRedirect("index");
         } else {

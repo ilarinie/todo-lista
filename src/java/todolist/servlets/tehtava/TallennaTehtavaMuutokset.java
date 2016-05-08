@@ -22,6 +22,7 @@ import static todolist.mallit.naytaJSP.asetaVirhe;
 import static todolist.mallit.naytaJSP.naytaJSP;
 
 /**
+ * Tällä luokalla tallennetaan muokatun tehtävän muutokset
  *
  * @author ile
  */
@@ -39,32 +40,40 @@ public class TallennaTehtavaMuutokset extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, SQLException, NamingException {
         response.setContentType("text/html;charset=UTF-8");
-        PrintWriter out = response.getWriter();
-         HttpSession session = request.getSession();
+
+        //Haetaan kirjautunut käyttäjä
+        HttpSession session = request.getSession();
         Kayttaja kirjautunut = (Kayttaja) session.getAttribute("kirjautunut");
-        
-        if (kirjautunut!=null){
-           int id = 0;
-           try {
-               id = Integer.parseInt(request.getParameter("id"));
-           }catch (Exception e){
-               
-           }
-           Tehtava muokkaus = new Tehtava();
-           muokkaus.setOtsikko(request.getParameter("otsikko"));
-           muokkaus.setPrioriteetti(Integer.parseInt(request.getParameter("prioriteetti")));
-           muokkaus.setKuvaus(request.getParameter("kuvaus"));
-           if (muokkaus.onKelvollinen()){
-               Tehtava.update(id, muokkaus);
-               response.sendRedirect("tehtava?id="+id);
-           }else {
-               request.setAttribute("tehtava", muokkaus);
-               request.setAttribute("virheet", muokkaus.getVirheet());
-               naytaJSP("edittehtava.jsp", request, response);
-           }
-           
-           
-        }else {
+
+        if (kirjautunut != null) {
+            //Parsetaan muokattavan tehtävän id
+            int id = 0;
+            try {
+                id = Integer.parseInt(request.getParameter("id"));
+            } catch (Exception e) {
+
+            }
+            //luodaan uusi tehtävä-olio muokatuilla tiedoilla
+            Tehtava muokkaus = new Tehtava();
+            muokkaus.setOtsikko(request.getParameter("otsikko"));
+            muokkaus.setPrioriteetti(Integer.parseInt(request.getParameter("prioriteetti")));
+            muokkaus.setKuvaus(request.getParameter("kuvaus"));
+            
+            //Tarkistetaan, onko muokatut tiedot kelvollisia ja tallennetaan muutokset kantaan jos näin on
+            //Ohjataan tämän jälkeen tehtävän esittelysivulle
+            if (muokkaus.onKelvollinen()) {
+                Tehtava.update(id, muokkaus);
+                response.sendRedirect("tehtava?id=" + id);
+            } else {
+                //Jos muokatut tiedot eivät ole kelvollisia, ohjataan uudelleen muokkausnäkymään,
+                //johon lisätään muokatut tietot ja virheviestit
+                request.setAttribute("tehtava", muokkaus);
+                request.setAttribute("virheet", muokkaus.getVirheet());
+                naytaJSP("edittehtava.jsp", request, response);
+            }
+
+        } else {
+            //Jos kirjautumista ei ole, pyydetään kirjautumaan sisään
             asetaVirhe("Kirjaudu ensin sisään", request);
             naytaJSP("login.jsp", request, response);
         }

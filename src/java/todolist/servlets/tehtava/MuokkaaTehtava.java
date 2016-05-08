@@ -56,18 +56,16 @@ public class MuokkaaTehtava extends HttpServlet {
             //Haetaan tehtävä
             Tehtava t = Tehtava.find(id);
             //Tarkistetaan että kyseessä on kirjautuneen käyttäjän oma tehtävä
-            if (t.getKayttaja().getId() == kirjautunut.getId()){
+            if (t.getKayttaja().getId() == kirjautunut.getId()) {
                 request.setAttribute("tehtava", t);
                 naytaJSP("edittehtava.jsp", request, response);
-                
-            }else {
+
+            } else {
                 asetaVirhe("Yritit muokata jonkun muun tehtavaa.", request);
                 naytaJSP("error.jsp", request, response);
                 return;
             }
-            
-            
-            
+
         } else {
             asetaVirhe("kirjaudu sisään poistaaksesi todon", request);
             naytaJSP("login.jsp", request, response);

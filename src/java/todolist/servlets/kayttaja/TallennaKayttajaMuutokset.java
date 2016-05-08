@@ -48,7 +48,7 @@ public class TallennaKayttajaMuutokset extends HttpServlet {
             Kayttaja muokkaus = new Kayttaja();
             muokkaus.setNimi(request.getParameter("nimi"));
             muokkaus.setSalasana(request.getParameter("salasana"));
-
+            
             Kayttaja.update(id, kirjautunut.getId(), muokkaus);
 
             response.sendRedirect("kayttaja?id=" + id);

@@ -133,43 +133,6 @@ public class Tehtava implements Comparable<Tehtava> {
 
     }
 
-    public static ArrayList<Tehtava> findAll() throws SQLException, NamingException {
-
-        Connection yhteys = Tietokanta.getYhteys();
-        String sql = "SELECT id, otsikko, kuvaus, prioriteetti, kayttaja_id, suoritettu from tehtava";
-        PreparedStatement kysely = yhteys.prepareStatement(sql);
-        ResultSet rs = kysely.executeQuery();
-        ArrayList<Tehtava> tehtavat = new ArrayList<Tehtava>();
-        while (rs.next()) {
-            //Haetaan tietoa riviltä
-            Tehtava t = new Tehtava();
-            t.setId(rs.getInt("id"));
-            t.setOtsikko(rs.getString("otsikko"));
-            t.setKuvaus(rs.getString("kuvaus"));
-            t.setPrioriteetti(rs.getInt("prioriteetti"));
-            t.setKayttaja(Kayttaja.getKayttaja(rs.getInt("kayttaja_id")));
-            t.setSuoritettu(rs.getBoolean("suoritettu"));
-            t.setKategoriat(addKategoriat(t.id));
-            tehtavat.add(t);
-
-        }
-        try {
-            rs.close();
-        } catch (Exception e) {
-        }
-        try {
-            kysely.close();
-        } catch (Exception e) {
-        }
-        try {
-            yhteys.close();
-        } catch (Exception e) {
-        }
-        Collections.sort(tehtavat);
-        return tehtavat;
-
-    }
-
     public static ArrayList<Tehtava> etsiKayttajanTehtavat(int kayttajaId) throws SQLException, NamingException {
 
         Connection yhteys = Tietokanta.getYhteys();
@@ -344,6 +307,7 @@ public class Tehtava implements Comparable<Tehtava> {
 
     }
 
+    //Hakee tehtävään kuuluvat kategoriat
     public static ArrayList<Kategoria> addKategoriat(int tehtavaId) throws NamingException, SQLException {
         Connection yhteys = Tietokanta.getYhteys();
         String sql = "SELECT Kategoria.otsikko, Kategoria.id, Kategoria.kayttaja_id FROM Kategoria, Tehtavakategoria, Tehtava "
@@ -374,6 +338,7 @@ public class Tehtava implements Comparable<Tehtava> {
         return kategoriat;
     }
 
+    //Lisää tehtävään uuden kategorian
     public static boolean addKategoria(int tehtavaId, int kategoriaId, int kayttajaId) throws NamingException, SQLException {
         if (Kategoria.findOne(kategoriaId).getKayttajaId() == kayttajaId) {
             Connection yhteys = Tietokanta.getYhteys();

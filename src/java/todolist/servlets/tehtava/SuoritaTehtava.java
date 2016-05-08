@@ -22,7 +22,8 @@ import static todolist.mallit.naytaJSP.asetaVirhe;
 import static todolist.mallit.naytaJSP.naytaJSP;
 
 /**
- *
+ *  Servlet joka merkitsee tehtävän suoritetuksi
+ * 
  * @author ile
  */
 public class SuoritaTehtava extends HttpServlet {
@@ -41,10 +42,13 @@ public class SuoritaTehtava extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         int id = Integer.parseInt(request.getParameter("id"));
 
+        
+        //haetaan kirjautunut käyttäjä
         HttpSession session = request.getSession();
         Kayttaja kirjautunut = (Kayttaja) session.getAttribute("kirjautunut");
 
         if (kirjautunut != null) {
+            //Yritetään merkitä tehtävä suoritetuksi ja palataan edelliseen näkymään
             if (!Tehtava.suorita(id)) {
                 response.sendRedirect(request.getHeader("referer"));
             } else {

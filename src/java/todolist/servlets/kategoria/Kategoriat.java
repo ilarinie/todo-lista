@@ -28,7 +28,7 @@ import static todolist.mallit.naytaJSP.naytaJSP;
  *
  * @author ile
  */
-public class KategoriaServlet extends HttpServlet {
+public class Kategoriat extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -58,6 +58,8 @@ public class KategoriaServlet extends HttpServlet {
             System.out.println(id);
 
             Kategoria k = Kategoria.findOne(id);
+            
+            //jos kategoria ei ole käyttäjän oma, ohjataan pois
             if (k.getKayttajaId() != kirjautunut.getId()){
                 asetaVirhe("Yritit katsella muiden kategorioita", request);
                 naytaJSP("error.jsp",request,response);
@@ -92,9 +94,9 @@ public class KategoriaServlet extends HttpServlet {
         try {
             processRequest(request, response);
         } catch (SQLException ex) {
-            Logger.getLogger(KategoriaServlet.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Kategoriat.class.getName()).log(Level.SEVERE, null, ex);
         } catch (NamingException ex) {
-            Logger.getLogger(KategoriaServlet.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Kategoriat.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -112,9 +114,9 @@ public class KategoriaServlet extends HttpServlet {
         try {
             processRequest(request, response);
         } catch (SQLException ex) {
-            Logger.getLogger(KategoriaServlet.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Kategoriat.class.getName()).log(Level.SEVERE, null, ex);
         } catch (NamingException ex) {
-            Logger.getLogger(KategoriaServlet.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Kategoriat.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
