@@ -79,6 +79,26 @@ public class Kategoria {
         return palautus;
 
     }
+    
+    public static boolean update(int id, int muokkaajaId, String otsikko) throws NamingException, SQLException{
+        Connection yhteys = Tietokanta.getYhteys();
+        String sql = "UPDATE Kategoria SET otsikko=? WHERE id ="+id+";";
+        PreparedStatement kysely = yhteys.prepareStatement(sql);
+        kysely.setString(1, otsikko);
+        
+       boolean palautus = kysely.execute();
+
+        try {
+            kysely.close();
+        } catch (Exception e) {
+        }
+        try {
+            yhteys.close();
+        } catch (Exception e) {
+        }
+
+        return palautus;
+    }
 
     public static Kategoria findOne(int id) throws SQLException, NamingException {
         Connection yhteys = Tietokanta.getYhteys();
@@ -223,5 +243,6 @@ public class Kategoria {
         }
         return true;
     }
+    
 
 }

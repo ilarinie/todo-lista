@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package todolist.servlets;
+package todolist.servlets.kategoria;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -18,7 +18,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import todolist.mallit.Kategoria;
 import todolist.mallit.Kayttaja;
-import todolist.mallit.Tehtava;
 import static todolist.mallit.naytaJSP.asetaVirhe;
 import static todolist.mallit.naytaJSP.naytaJSP;
 
@@ -26,7 +25,7 @@ import static todolist.mallit.naytaJSP.naytaJSP;
  *
  * @author ile
  */
-public class NewKategoriaServlet extends HttpServlet {
+public class MuokkaaKategoria extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -38,30 +37,38 @@ public class NewKategoriaServlet extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException, NamingException, SQLException {
-        String otsikko = request.getParameter("otsikko");
-        HttpSession session = request.getSession();
+            throws ServletException, IOException, SQLException, NamingException {
+        response.setContentType("text/html;charset=UTF-8");
+         HttpSession session = request.getSession();
         Kayttaja kirjautunut = (Kayttaja) session.getAttribute("kirjautunut");
 
         if (kirjautunut != null) {
-
-            if (otsikko == null) {
-                naytaJSP("newkategoria.jsp", request, response);
+            int id = 0;
+            //Parsetaan id parametreistä
+            try {
+                id = Integer.parseInt(request.getParameter("id"));
+            } catch (Exception e) {
+                asetaVirhe("Yrititkö kirjoittaa osoitetta käsin?", request);
+                naytaJSP("error.jsp", request, response);
                 return;
             }
-
-            if (otsikko == null || otsikko.equals("")) {
-                asetaVirhe("Anna otsikko", request);
-                naytaJSP("newkategoria.jsp", request, response);
+            //Haetaan tehtävä
+            Kategoria k = Kategoria.findOne(id);
+            //Tarkistetaan että kyseessä on kirjautuneen käyttäjän oma tehtävä
+            if (k.getKayttajaId() == kirjautunut.getId()){
+                request.setAttribute("kategoria", k);
+                naytaJSP("editkategoria.jsp", request, response);
+                
+            }else {
+                asetaVirhe("Yritit muokata käyttäjää ilman oikeuksia", request);
+                naytaJSP("error.jsp", request, response);
+                return;
             }
-
-            if (!Kategoria.save(otsikko, kirjautunut.getId() ) ) {
-                response.sendRedirect("index");
-            } else {
-                response.sendRedirect("newkategoria");
-            }
+            
+            
+            
         } else {
-            asetaVirhe("Kirjaudu ensin sisään", request);
+            asetaVirhe("kirjaudu sisään poistaaksesi todon", request);
             naytaJSP("login.jsp", request, response);
         }
     }
@@ -80,10 +87,10 @@ public class NewKategoriaServlet extends HttpServlet {
             throws ServletException, IOException {
         try {
             processRequest(request, response);
-        } catch (NamingException ex) {
-            Logger.getLogger(NewTehtavaServlet.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
-            Logger.getLogger(NewTehtavaServlet.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(MuokkaaKategoria.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NamingException ex) {
+            Logger.getLogger(MuokkaaKategoria.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -100,10 +107,10 @@ public class NewKategoriaServlet extends HttpServlet {
             throws ServletException, IOException {
         try {
             processRequest(request, response);
-        } catch (NamingException ex) {
-            Logger.getLogger(NewTehtavaServlet.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
-            Logger.getLogger(NewTehtavaServlet.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(MuokkaaKategoria.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NamingException ex) {
+            Logger.getLogger(MuokkaaKategoria.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package todolist.servlets;
+package todolist.servlets.kayttaja;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import todolist.mallit.Kayttaja;
+import todolist.mallit.Tehtava;
 import static todolist.mallit.naytaJSP.asetaVirhe;
 import static todolist.mallit.naytaJSP.naytaJSP;
 
@@ -24,7 +25,7 @@ import static todolist.mallit.naytaJSP.naytaJSP;
  *
  * @author ile
  */
-public class DestroyKayttajaServlet extends HttpServlet {
+public class NewKayttajaServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -38,22 +39,37 @@ public class DestroyKayttajaServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, NamingException, SQLException {
         response.setContentType("text/html;charset=UTF-8");
-        
-        int id = Integer.parseInt(request.getParameter("id"));
+        String nimi = request.getParameter("nimi");
+        String salasana = request.getParameter("salasana");
+
         HttpSession session = request.getSession();
         Kayttaja kirjautunut = (Kayttaja) session.getAttribute("kirjautunut");
-        
-        if (kirjautunut!=null){
-            if (!Kayttaja.destroy(id, kirjautunut.getId())){
-                System.out.println("blaa");
-                response.sendRedirect(request.getHeader("referer"));
-            }else {
-                asetaVirhe("Et voi poistaa käyttäjää", request);
-                naytaJSP("error.jsp",request,response);
+
+        if (kirjautunut == null) {
+
+            if (nimi == null || salasana == null) {
+                naytaJSP("signup.jsp", request, response);
+                return;
             }
 
-        }else {
-            asetaVirhe("kirjaudu sisään poistaaksesi todon", request);
+            if (nimi == null || nimi.equals("")) {
+                asetaVirhe("Anna käyttäjätunnus", request);
+                naytaJSP("signup.jsp", request, response);
+            }
+            if (salasana == null || salasana.equals("")) {
+                asetaVirhe("Anna salasana", request);
+                naytaJSP("signup.jsp", request, response);
+            }
+
+            if (!Kayttaja.save(nimi,salasana)) {
+                asetaVirhe("Eikä ollu! Käyttäjä rekisteröity! Kirjaudu nyt sisään.", request);
+                naytaJSP("login.jsp", request, response);
+            } else {
+                asetaVirhe("Käyttäjätunnus jo käytössä :(", request);
+                naytaJSP("login.jsp", request, response);
+            }
+        } else {
+            asetaVirhe("Olet jo kirjautunut sisään, silly", request);
             naytaJSP("login.jsp", request, response);
         }
     }
@@ -73,9 +89,9 @@ public class DestroyKayttajaServlet extends HttpServlet {
         try {
             processRequest(request, response);
         } catch (NamingException ex) {
-            Logger.getLogger(DestroyKayttajaServlet.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(NewKayttajaServlet.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
-            Logger.getLogger(DestroyKayttajaServlet.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(NewKayttajaServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -93,9 +109,9 @@ public class DestroyKayttajaServlet extends HttpServlet {
         try {
             processRequest(request, response);
         } catch (NamingException ex) {
-            Logger.getLogger(DestroyKayttajaServlet.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(NewKayttajaServlet.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
-            Logger.getLogger(DestroyKayttajaServlet.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(NewKayttajaServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

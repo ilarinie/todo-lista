@@ -266,31 +266,31 @@ public class Tehtava implements Comparable<Tehtava> {
     }
 
     public static boolean destroy(int id, int tuhoojaId) throws NamingException, SQLException {
-        if (Tehtava.find(id).getKayttaja().getId() == tuhoojaId){
-        Connection yhteys = Tietokanta.getYhteys();
-        String sql = "DELETE FROM Tehtava WHERE id = " + id;
-        PreparedStatement kysely = yhteys.prepareStatement(sql);
+        if (Tehtava.find(id).getKayttaja().getId() == tuhoojaId) {
+            Connection yhteys = Tietokanta.getYhteys();
+            String sql = "DELETE FROM Tehtava WHERE id = " + id;
+            PreparedStatement kysely = yhteys.prepareStatement(sql);
 
-        boolean palautus = kysely.execute();
+            boolean palautus = kysely.execute();
 
-        try {
-            kysely.close();
-        } catch (Exception e) {
-        }
-        try {
-            yhteys.close();
-        } catch (Exception e) {
-        }
+            try {
+                kysely.close();
+            } catch (Exception e) {
+            }
+            try {
+                yhteys.close();
+            } catch (Exception e) {
+            }
 
-        return palautus;
-        
-        }else {
+            return palautus;
+
+        } else {
             return true;
         }
 
     }
 
-    public static boolean update(int id) throws NamingException, SQLException {
+    public static boolean suorita(int id) throws NamingException, SQLException {
         Connection yhteys = Tietokanta.getYhteys();
         String sql = "UPDATE Tehtava SET suoritettu=true WHERE id = " + id;
         PreparedStatement kysely = yhteys.prepareStatement(sql);
@@ -306,6 +306,28 @@ public class Tehtava implements Comparable<Tehtava> {
         } catch (Exception e) {
         }
 
+        return palautus;
+
+    }
+
+    public static boolean update(int id, Tehtava t) throws SQLException, NamingException {
+        Connection yhteys = Tietokanta.getYhteys();
+        String sql = "UPDATE Tehtava SET otsikko=?, prioriteetti=?, kuvaus=? WHERE id = " + id;
+        PreparedStatement kysely = yhteys.prepareStatement(sql);
+        kysely.setString(1, t.getOtsikko());
+        kysely.setInt(2, t.getPrioriteetti());
+        kysely.setString(3, t.getKuvaus());
+
+        boolean palautus = kysely.execute();
+
+        try {
+            kysely.close();
+        } catch (Exception e) {
+        }
+        try {
+            yhteys.close();
+        } catch (Exception e) {
+        }
         return palautus;
 
     }

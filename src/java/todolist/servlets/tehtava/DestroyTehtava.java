@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package todolist.servlets;
+package todolist.servlets.tehtava;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -25,7 +25,7 @@ import static todolist.mallit.naytaJSP.naytaJSP;
  *
  * @author ile
  */
-public class NewKayttajaServlet extends HttpServlet {
+public class DestroyTehtava extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -39,39 +39,23 @@ public class NewKayttajaServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, NamingException, SQLException {
         response.setContentType("text/html;charset=UTF-8");
-        String nimi = request.getParameter("nimi");
-        String salasana = request.getParameter("salasana");
 
+        int id = Integer.parseInt(request.getParameter("id"));
         HttpSession session = request.getSession();
         Kayttaja kirjautunut = (Kayttaja) session.getAttribute("kirjautunut");
-
-        if (kirjautunut == null) {
-
-            if (nimi == null || salasana == null) {
-                naytaJSP("signup.jsp", request, response);
-                return;
-            }
-
-            if (nimi == null || nimi.equals("")) {
-                asetaVirhe("Anna käyttäjätunnus", request);
-                naytaJSP("signup.jsp", request, response);
-            }
-            if (salasana == null || salasana.equals("")) {
-                asetaVirhe("Anna salasana", request);
-                naytaJSP("signup.jsp", request, response);
-            }
-
-            if (!Kayttaja.save(nimi,salasana)) {
-                asetaVirhe("Eikä ollu! Käyttäjä rekisteröity! Kirjaudu nyt sisään.", request);
-                naytaJSP("login.jsp", request, response);
-            } else {
-                asetaVirhe("Käyttäjätunnus jo käytössä :(", request);
-                naytaJSP("login.jsp", request, response);
-            }
+        
+        if (kirjautunut!=null){
+        if (!Tehtava.destroy(id, kirjautunut.getId())) {
+            response.sendRedirect("index");
         } else {
-            asetaVirhe("Olet jo kirjautunut sisään, silly", request);
+            asetaVirhe("poisto epäonnistui", request);
+            response.sendRedirect("index");
+        }
+        }else {
+            asetaVirhe("kirjaudu sisään poistaaksesi todon", request);
             naytaJSP("login.jsp", request, response);
         }
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -89,9 +73,9 @@ public class NewKayttajaServlet extends HttpServlet {
         try {
             processRequest(request, response);
         } catch (NamingException ex) {
-            Logger.getLogger(NewKayttajaServlet.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DestroyTehtava.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
-            Logger.getLogger(NewKayttajaServlet.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DestroyTehtava.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -109,9 +93,9 @@ public class NewKayttajaServlet extends HttpServlet {
         try {
             processRequest(request, response);
         } catch (NamingException ex) {
-            Logger.getLogger(NewKayttajaServlet.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DestroyTehtava.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
-            Logger.getLogger(NewKayttajaServlet.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DestroyTehtava.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

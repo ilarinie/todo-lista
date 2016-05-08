@@ -3,19 +3,22 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package todolist.servlets;
+package todolist.servlets.kategoria;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.naming.NamingException;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import todolist.mallit.Kategoria;
 import todolist.mallit.Kayttaja;
 import todolist.mallit.Tehtava;
 import static todolist.mallit.naytaJSP.asetaVirhe;
@@ -25,7 +28,7 @@ import static todolist.mallit.naytaJSP.naytaJSP;
  *
  * @author ile
  */
-public class NewTehtavaServlet extends HttpServlet {
+public class KategoriaServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -37,30 +40,37 @@ public class NewTehtavaServlet extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException, NamingException, SQLException {
-        String otsikko = request.getParameter("otsikko");
-        String kuvaus = request.getParameter("kuvaus");
-        String prioriteetti = request.getParameter("prioriteetti");
+            throws ServletException, IOException, SQLException, NamingException {
+        response.setContentType("text/html;charset=UTF-8");
+        String param = request.getParameter("id");
         HttpSession session = request.getSession();
         Kayttaja kirjautunut = (Kayttaja) session.getAttribute("kirjautunut");
-
         if (kirjautunut != null) {
 
-            if (otsikko == null || kuvaus == null || prioriteetti == null) {
-                naytaJSP("newtehtava.jsp", request, response);
+            if (param == null || param.isEmpty()) {
+                ArrayList<Kategoria> kategoriat = Kategoria.etsiKayttajanKategoriat(kirjautunut.getId());
+                request.setAttribute("kategoriat", kategoriat);
+
+                naytaJSP("kategoriat.jsp", request, response);
                 return;
             }
+            int id = Integer.parseInt(param);
+            System.out.println(id);
 
-            if (otsikko == null || otsikko.equals("")) {
-                asetaVirhe("Anna otsikko", request);
-                naytaJSP("newtehtava", request, response);
+            Kategoria k = Kategoria.findOne(id);
+            if (k.getKayttajaId() != kirjautunut.getId()){
+                asetaVirhe("Yritit katsella muiden kategorioita", request);
+                naytaJSP("error.jsp",request,response);
+                return;
             }
+            ArrayList<Tehtava> lista = Kategoria.getKategoriaTehtavat(id);
 
-            if (!Tehtava.save(otsikko, kuvaus, Integer.parseInt(prioriteetti),kirjautunut.getId())) {
-                response.sendRedirect("index");
-            } else {
-                response.sendRedirect("newtehtava");
-            }
+            request.setAttribute("kategoria", k);
+            request.setAttribute("tehtavalista", lista);
+
+            RequestDispatcher dispatcher = request.getRequestDispatcher("kategoria.jsp");
+
+            dispatcher.forward(request, response);
         } else {
             asetaVirhe("Kirjaudu ensin sisään", request);
             naytaJSP("login.jsp", request, response);
@@ -81,10 +91,10 @@ public class NewTehtavaServlet extends HttpServlet {
             throws ServletException, IOException {
         try {
             processRequest(request, response);
-        } catch (NamingException ex) {
-            Logger.getLogger(NewTehtavaServlet.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
-            Logger.getLogger(NewTehtavaServlet.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(KategoriaServlet.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NamingException ex) {
+            Logger.getLogger(KategoriaServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -101,10 +111,10 @@ public class NewTehtavaServlet extends HttpServlet {
             throws ServletException, IOException {
         try {
             processRequest(request, response);
-        } catch (NamingException ex) {
-            Logger.getLogger(NewTehtavaServlet.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
-            Logger.getLogger(NewTehtavaServlet.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(KategoriaServlet.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NamingException ex) {
+            Logger.getLogger(KategoriaServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

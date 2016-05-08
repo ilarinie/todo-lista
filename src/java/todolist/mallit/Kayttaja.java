@@ -66,8 +66,6 @@ public class Kayttaja {
     public void setAdmin(boolean admin) {
         this.admin = admin;
     }
-    
-    
 
     public static ArrayList<Kayttaja> getKayttajat() throws NamingException, SQLException {
         Connection yhteys = Tietokanta.getYhteys();
@@ -238,7 +236,7 @@ public class Kayttaja {
             kirjautunut.setNimi(rs.getString("nimi"));
             kirjautunut.setSalasana(rs.getString("salasana"));
             kirjautunut.setAdmin(rs.getBoolean("admin"));
-            
+
         }
 
         //Jos kysely ei tuottanut tuloksia käyttäjä on nyt vielä null.
@@ -259,28 +257,56 @@ public class Kayttaja {
         //Käyttäjä palautetaan vasta täällä, kun resurssit on suljettu onnistuneesti.
         return kirjautunut;
     }
-    
-      public static boolean destroy(int id, int tuhoojaId) throws NamingException, SQLException {
-        if (Kayttaja.getKayttaja(tuhoojaId).isAdmin()){
-        Connection yhteys = Tietokanta.getYhteys();
-        String sql = "DELETE FROM Kayttaja WHERE id ="+id+";";
-        PreparedStatement kysely = yhteys.prepareStatement(sql);
 
-        boolean palautus = kysely.execute();
+    public static boolean destroy(int id, int tuhoojaId) throws NamingException, SQLException {
+        if (Kayttaja.getKayttaja(tuhoojaId).isAdmin()) {
+            Connection yhteys = Tietokanta.getYhteys();
+            String sql = "DELETE FROM Kayttaja WHERE id =" + id + ";";
+            PreparedStatement kysely = yhteys.prepareStatement(sql);
 
-        try {
-            kysely.close();
-        } catch (Exception e) {
-        }
-        try {
-            yhteys.close();
-        } catch (Exception e) {
-        }
+            boolean palautus = kysely.execute();
 
-        return palautus;
-        }
-        else {
+            try {
+                kysely.close();
+            } catch (Exception e) {
+            }
+            try {
+                yhteys.close();
+            } catch (Exception e) {
+            }
+
+            return palautus;
+        } else {
             return true;
         }
+    }
+
+    public static boolean update(int id, int muokkaajaId, Kayttaja k) throws NamingException, SQLException {
+        if (Kayttaja.getKayttaja(muokkaajaId).isAdmin() || k.getId() == muokkaajaId) {
+            Connection yhteys = Tietokanta.getYhteys();
+            String sql = "UPDATE Kayttaja SET nimi=?, salasana=? WHERE id = " + id;
+            PreparedStatement kysely = yhteys.prepareStatement(sql);
+            kysely.setString(1, k.getNimi());
+            kysely.setString(2, k.getSalasana());
+
+            boolean palautus = kysely.execute();
+
+            try {
+                kysely.close();
+            } catch (Exception e) {
+            }
+            try {
+                yhteys.close();
+            } catch (Exception e) {
+            }
+            return palautus;
+
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return this.nimi;
     }
 }

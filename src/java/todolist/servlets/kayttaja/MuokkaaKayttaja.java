@@ -3,12 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package todolist.servlets;
+package todolist.servlets.kayttaja;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.naming.NamingException;
@@ -18,7 +16,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import todolist.mallit.Kayttaja;
-import todolist.mallit.Tehtava;
 import static todolist.mallit.naytaJSP.asetaVirhe;
 import static todolist.mallit.naytaJSP.naytaJSP;
 
@@ -26,7 +23,7 @@ import static todolist.mallit.naytaJSP.naytaJSP;
  *
  * @author ile
  */
-public class ShowKayttajaServlet extends HttpServlet {
+public class MuokkaaKayttaja extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -40,20 +37,35 @@ public class ShowKayttajaServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, NamingException, SQLException {
         response.setContentType("text/html;charset=UTF-8");
-        int id = Integer.parseInt(request.getParameter("id"));
         HttpSession session = request.getSession();
         Kayttaja kirjautunut = (Kayttaja) session.getAttribute("kirjautunut");
-        
-        if (kirjautunut!=null){
-            Kayttaja kayttaja = Kayttaja.getKayttaja(id);
-            if (kayttaja != null) {
-            request.setAttribute("kayttaja", kayttaja);
-            ArrayList<Tehtava> tehtavat = Tehtava.getKayttajanTehtavat(id);
-            request.setAttribute("tehtavat", tehtavat);
-            naytaJSP("kayttaja.jsp",request,response);
-            
+
+        if (kirjautunut != null) {
+            int id = 0;
+            //Parsetaan id parametreistä
+            try {
+                id = Integer.parseInt(request.getParameter("id"));
+            } catch (Exception e) {
+                asetaVirhe("Yrititkö kirjoittaa osoitetta käsin?", request);
+                naytaJSP("error.jsp", request, response);
+                return;
             }
-        }else {
+            //Haetaan tehtävä
+            Kayttaja k = Kayttaja.getKayttaja(id);
+            //Tarkistetaan että kyseessä on kirjautuneen käyttäjän oma tehtävä
+            if (k.getId() == kirjautunut.getId() || kirjautunut.isAdmin()){
+                request.setAttribute("kayttaja", k);
+                naytaJSP("editkayttaja.jsp", request, response);
+                
+            }else {
+                asetaVirhe("Yritit muokata käyttäjää ilman oikeuksia", request);
+                naytaJSP("error.jsp", request, response);
+                return;
+            }
+            
+            
+            
+        } else {
             asetaVirhe("kirjaudu sisään poistaaksesi todon", request);
             naytaJSP("login.jsp", request, response);
         }
@@ -74,9 +86,9 @@ public class ShowKayttajaServlet extends HttpServlet {
         try {
             processRequest(request, response);
         } catch (NamingException ex) {
-            Logger.getLogger(ShowKayttajaServlet.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(MuokkaaKayttaja.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
-            Logger.getLogger(ShowKayttajaServlet.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(MuokkaaKayttaja.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -94,9 +106,9 @@ public class ShowKayttajaServlet extends HttpServlet {
         try {
             processRequest(request, response);
         } catch (NamingException ex) {
-            Logger.getLogger(ShowKayttajaServlet.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(MuokkaaKayttaja.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
-            Logger.getLogger(ShowKayttajaServlet.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(MuokkaaKayttaja.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

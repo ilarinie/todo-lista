@@ -8,16 +8,30 @@
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <t:pohja pageTitle="Käyttäjälista">
 
-     <h2>Käyttäjien lista</h2>
-     <ul>
-    <c:forEach items="${lista}" var="kayttaja">
-        <li>${kayttaja.nimi}
-            <c:if test="${kirjautunut.admin}">
-                <a href="destroykayttaja?id=${kayttaja.id}" class="btn btn-danger">Poista</a>
-            </c:if>
-        </li>
-    </c:forEach>
-     </ul>
-    
+    <h2>Käyttäjien lista</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Käyttäjä</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            <c:forEach items="${lista}" var="kayttaja">
+                <tr>
+                    <td>${kayttaja.nimi}<td>
+                    <td> <c:if test="${kirjautunut.admin}">
+                            <a href="destroykayttaja?id=${kayttaja.id}" class="btn btn-danger">Poista</a> <a href="muokkaakayttaja?id=${kayttaja.id}" class="btn btn-warning">Muokkaa</a>
+                        </c:if></td>
+                    <td> <c:if test="${kirjautunut.id}==${kayttaja.id}">
+                            <a href="muokkaakayttaja?id=${kayttaja.id}" class="btn btn-warning">Muokkaa</a>
+                        </c:if></td>
+                </tr>
+            </c:forEach>
+        </tbody>
+    </table>
+
+</ul>
+
 </t:pohja>
 

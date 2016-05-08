@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package todolist.servlets;
+package todolist.servlets.tehtava;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -27,7 +27,7 @@ import static todolist.mallit.naytaJSP.naytaJSP;
  *
  * @author ile
  */
-public class ShowTehtavaServlet extends HttpServlet {
+public class ShowTehtava extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -90,9 +90,9 @@ public class ShowTehtavaServlet extends HttpServlet {
         try {
             processRequest(request, response);
         } catch (NamingException ex) {
-            Logger.getLogger(ShowTehtavaServlet.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ShowTehtava.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
-            Logger.getLogger(ShowTehtavaServlet.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ShowTehtava.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -110,9 +110,9 @@ public class ShowTehtavaServlet extends HttpServlet {
         try {
             processRequest(request, response);
         } catch (NamingException ex) {
-            Logger.getLogger(ShowTehtavaServlet.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ShowTehtava.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
-            Logger.getLogger(ShowTehtavaServlet.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ShowTehtava.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

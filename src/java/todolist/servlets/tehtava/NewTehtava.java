@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package todolist.servlets;
+package todolist.servlets.tehtava;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -25,7 +25,7 @@ import static todolist.mallit.naytaJSP.naytaJSP;
  *
  * @author ile
  */
-public class DestroyTehtava extends HttpServlet {
+public class NewTehtava extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -38,24 +38,39 @@ public class DestroyTehtava extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, NamingException, SQLException {
-        response.setContentType("text/html;charset=UTF-8");
-
-        int id = Integer.parseInt(request.getParameter("id"));
+        String otsikko = request.getParameter("otsikko");
+        String kuvaus = request.getParameter("kuvaus");
+        String prioriteetti = request.getParameter("prioriteetti");
         HttpSession session = request.getSession();
         Kayttaja kirjautunut = (Kayttaja) session.getAttribute("kirjautunut");
-        
-        if (kirjautunut!=null){
-        if (!Tehtava.destroy(id, kirjautunut.getId())) {
-            response.sendRedirect("index");
+
+        if (kirjautunut != null) {
+
+            if (otsikko == null || kuvaus == null || prioriteetti == null) {
+                naytaJSP("newtehtava.jsp", request, response);
+                return;
+            }
+
+            if (otsikko.equals("")) {
+                asetaVirhe("Anna otsikko", request);
+                naytaJSP("newtehtava", request, response);
+            }
+            if (kuvaus.equals("")){
+                asetaVirhe("Anna kuvaus", request);
+                naytaJSP("newtehtava", request, response);
+            }
+            
+            int tid = Tehtava.save(otsikko, kuvaus, Integer.parseInt(prioriteetti),kirjautunut.getId());
+            System.out.println(tid);
+            if (tid != 0) {
+                response.sendRedirect("tehtava?id="+tid);
+            } else {
+                response.sendRedirect("newtehtava");
+            }
         } else {
-            asetaVirhe("poisto epäonnistui", request);
-            response.sendRedirect("index");
-        }
-        }else {
-            asetaVirhe("kirjaudu sisään poistaaksesi todon", request);
+            asetaVirhe("Kirjaudu ensin sisään", request);
             naytaJSP("login.jsp", request, response);
         }
-
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -73,9 +88,9 @@ public class DestroyTehtava extends HttpServlet {
         try {
             processRequest(request, response);
         } catch (NamingException ex) {
-            Logger.getLogger(DestroyTehtava.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(NewTehtava.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
-            Logger.getLogger(DestroyTehtava.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(NewTehtava.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -93,9 +108,9 @@ public class DestroyTehtava extends HttpServlet {
         try {
             processRequest(request, response);
         } catch (NamingException ex) {
-            Logger.getLogger(DestroyTehtava.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(NewTehtava.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
-            Logger.getLogger(DestroyTehtava.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(NewTehtava.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

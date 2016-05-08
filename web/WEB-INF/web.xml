@@ -6,19 +6,19 @@
     </servlet>
     <servlet>
         <servlet-name>KayttajaServlet</servlet-name>
-        <servlet-class>todolist.servlets.KayttajatServlet</servlet-class>
+        <servlet-class>todolist.servlets.kayttaja.KayttajatServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>TehtavaServlet</servlet-name>
-        <servlet-class>todolist.servlets.TehtavaServlet</servlet-class>
+        <servlet-class>todolist.servlets.tehtava.TehtavaServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>NewTehtavaServlet</servlet-name>
-        <servlet-class>todolist.servlets.NewTehtavaServlet</servlet-class>
+        <servlet-class>todolist.servlets.tehtava.NewTehtava</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>NewKategoriaServlet</servlet-name>
-        <servlet-class>todolist.servlets.NewKategoriaServlet</servlet-class>
+        <servlet-class>todolist.servlets.kategoria.NewKategoriaServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>LoginServlet</servlet-name>
@@ -26,35 +26,59 @@
     </servlet>
     <servlet>
         <servlet-name>DestroyTehtavaServlet</servlet-name>
-        <servlet-class>todolist.servlets.DestroyTehtava</servlet-class>
+        <servlet-class>todolist.servlets.tehtava.DestroyTehtava</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>SuoritaTehtava</servlet-name>
-        <servlet-class>todolist.servlets.SuoritaTehtava</servlet-class>
+        <servlet-class>todolist.servlets.tehtava.SuoritaTehtava</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>ShowTehtavaServlet</servlet-name>
-        <servlet-class>todolist.servlets.ShowTehtavaServlet</servlet-class>
+        <servlet-class>todolist.servlets.tehtava.ShowTehtava</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>ShowKayttajaServlet</servlet-name>
-        <servlet-class>todolist.servlets.ShowKayttajaServlet</servlet-class>
+        <servlet-class>todolist.servlets.kayttaja.ShowKayttajaServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>NewKayttajaServlet</servlet-name>
-        <servlet-class>todolist.servlets.NewKayttajaServlet</servlet-class>
+        <servlet-class>todolist.servlets.kayttaja.NewKayttajaServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>KategoriaServlet</servlet-name>
-        <servlet-class>todolist.servlets.KategoriaServlet</servlet-class>
+        <servlet-class>todolist.servlets.kategoria.KategoriaServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>LisaaKategoriaServlet</servlet-name>
-        <servlet-class>todolist.servlets.LisaaKategoriaServlet</servlet-class>
+        <servlet-class>todolist.servlets.kategoria.LisaaKategoriaServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>DestroyKayttajaServlet</servlet-name>
-        <servlet-class>todolist.servlets.DestroyKayttajaServlet</servlet-class>
+        <servlet-class>todolist.servlets.kayttaja.DestroyKayttajaServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>MuokkaaTehtavaServlet</servlet-name>
+        <servlet-class>todolist.servlets.tehtava.MuokkaaTehtava</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>TallennaTehtavaMuutokset</servlet-name>
+        <servlet-class>todolist.servlets.tehtava.TallennaTehtavaMuutokset</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>MuokkaaKayttaja</servlet-name>
+        <servlet-class>todolist.servlets.kayttaja.MuokkaaKayttaja</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>TallennaKayttajaMuutokset</servlet-name>
+        <servlet-class>todolist.servlets.kayttaja.TallennaKayttajaMuutokset</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>MuokkaaKategoria</servlet-name>
+        <servlet-class>todolist.servlets.kategoria.MuokkaaKategoria</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>TallennaKategoriaMuutokset</servlet-name>
+        <servlet-class>todolist.servlets.kategoria.TallennaKategoriaMuutokset</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>Listaus</servlet-name>
@@ -111,6 +135,30 @@
     <servlet-mapping>
         <servlet-name>DestroyKayttajaServlet</servlet-name>
         <url-pattern>/destroykayttaja</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>MuokkaaTehtavaServlet</servlet-name>
+        <url-pattern>/muokkaatehtava</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>TallennaTehtavaMuutokset</servlet-name>
+        <url-pattern>/tallennatehtavamuutokset</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>MuokkaaKayttaja</servlet-name>
+        <url-pattern>/muokkaakayttaja</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>TallennaKayttajaMuutokset</servlet-name>
+        <url-pattern>/tallennakayttajamuutokset</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>MuokkaaKategoria</servlet-name>
+        <url-pattern>/muokkaakategoria</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>TallennaKategoriaMuutokset</servlet-name>
+        <url-pattern>/tallennakategoriamuutokset</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

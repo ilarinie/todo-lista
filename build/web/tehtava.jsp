@@ -32,15 +32,33 @@
         </c:choose>
     </p>
 
-    <div class="dropdown">
-        <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Lisää Kategoria
-            <span class="caret"></span></button>
-        <ul class="dropdown-menu">
-            <c:forEach items="${lisattavat}" var="kat">
-                <li><a href="lisaakategoria?tid=${tehtava.id}&kid=${kat.id}">${kat.otsikko}</a></li>
-                </c:forEach>
-        </ul>
-    </div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Lisää kategoria</th>
+                <th>Muokkaa</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    <div class="dropdown">
+                        <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Lisää Kategoria
+                            <span class="caret"></span></button>
+                        <ul class="dropdown-menu">
+                            <c:forEach items="${lisattavat}" var="kat">
+                                <li><a href="lisaakategoria?tid=${tehtava.id}&kid=${kat.id}">${kat.otsikko}</a></li>
+                                </c:forEach>
+                        </ul>
+                    </div>
+                </td>
+                <td>
+
+                    <a href="muokkaatehtava?id=${tehtava.id}" class="btn btn-warning">Muokkaa</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
 </div>
 
 

@@ -3,11 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package todolist.servlets;
+package todolist.servlets.kayttaja;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.naming.NamingException;
@@ -25,7 +26,7 @@ import static todolist.mallit.naytaJSP.naytaJSP;
  *
  * @author ile
  */
-public class SuoritaTehtava extends HttpServlet {
+public class ShowKayttajaServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -40,23 +41,22 @@ public class SuoritaTehtava extends HttpServlet {
             throws ServletException, IOException, NamingException, SQLException {
         response.setContentType("text/html;charset=UTF-8");
         int id = Integer.parseInt(request.getParameter("id"));
-
         HttpSession session = request.getSession();
         Kayttaja kirjautunut = (Kayttaja) session.getAttribute("kirjautunut");
-
-        if (kirjautunut != null) {
-            if (!Tehtava.update(id)) {
-                response.sendRedirect(request.getHeader("referer"));
-            } else {
-                asetaVirhe("Ongelma suorituksessa", request);
-                response.sendRedirect(request.getHeader("referer"));
+        
+        if (kirjautunut!=null){
+            Kayttaja kayttaja = Kayttaja.getKayttaja(id);
+            if (kayttaja != null) {
+            request.setAttribute("kayttaja", kayttaja);
+            ArrayList<Tehtava> tehtavat = Tehtava.getKayttajanTehtavat(id);
+            request.setAttribute("tehtavat", tehtavat);
+            naytaJSP("kayttaja.jsp",request,response);
+            
             }
-        } else {
-            asetaVirhe("Kirjaudu sisään suorittaaksesi.", request);
+        }else {
+            asetaVirhe("kirjaudu sisään poistaaksesi todon", request);
             naytaJSP("login.jsp", request, response);
-
         }
-
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -74,9 +74,9 @@ public class SuoritaTehtava extends HttpServlet {
         try {
             processRequest(request, response);
         } catch (NamingException ex) {
-            Logger.getLogger(SuoritaTehtava.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ShowKayttajaServlet.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
-            Logger.getLogger(SuoritaTehtava.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ShowKayttajaServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -94,9 +94,9 @@ public class SuoritaTehtava extends HttpServlet {
         try {
             processRequest(request, response);
         } catch (NamingException ex) {
-            Logger.getLogger(SuoritaTehtava.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ShowKayttajaServlet.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
-            Logger.getLogger(SuoritaTehtava.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ShowKayttajaServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
